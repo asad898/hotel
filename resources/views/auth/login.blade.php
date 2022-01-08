@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('head')
+    <title>Hotel - Login</title>
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center pt-5">

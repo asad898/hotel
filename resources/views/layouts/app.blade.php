@@ -2,14 +2,6 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>Hotel</title>
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,28 +9,28 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet"
-        href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- JQVMap -->
-    <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
-    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <!-- iCheck -->
+    {{-- <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}"> --}}
+    <!-- JQVMap -->
+    {{-- <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}"> --}}
+    <!-- Theme style -->
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}"> --}}
     <!-- summernote -->
-    <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&display=swap');
-    </style>
-
+    {{-- <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}"> --}}
+    @yield('head')
 </head>
 
 <body style="font-family: 'Cairo', sans-serif" class="hold-transition sidebar-mini layout-fixed">
@@ -53,10 +45,13 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="{{ route('home') }}" class="nav-link">الرئيسية</a>
+                    <a href="{{ route('guests') }}" class="nav-link">النزلاء</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">النزلاء</a>
+                    <a href="{{ route('rooms') }}" class="nav-link">الغرف</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('home') }}" class="nav-link">الرئيسية</a>
                 </li>
             </ul>
 
@@ -64,27 +59,6 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
                 @auth
-                    <li class="nav-item">
-                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                        </a>
-                        <div class="navbar-search-block">
-                            <form class="form-inline">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                        aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                             <i class="fas fa-expand-arrows-alt"></i>
@@ -98,7 +72,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                             <div class="d-flex">
-                                <p>{{ auth()->user()->username }} <i class="fa fa-angle-down mr-2" aria-hidden="true"></i></p>
+                                <p>{{ auth()->user()->username }}<i class="fa fa-angle-down ml-1" aria-hidden="true"></i></p>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left text-right" style="right: inherit; right: 0px;">
@@ -131,8 +105,9 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/" class="brand-link text-center">
-                <i class="fas fa-hotel"></i>
-                <span class="brand-text font-weight-bold">Hotel</span>
+                <i class="brand-image img-circle elevation-3 fas fa-hotel mt-2" alt="Hotel"></i>
+                {{-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> --}}
+                <span class="brand-text font-weight-bold">Fisal Hotel</span>
             </a>
 
             <!-- Sidebar -->
@@ -147,35 +122,35 @@
                        with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-door-open mr-3"></i>
+                                <i class="nav-icon fas fa-door-open mr-3"></i>
                                 <p>
-                                    الغرف
+                                    الاستقبال
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('rooms') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>عرض الغرف</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addRoom">
+                                    <a href="{{ route('bills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة غرفة</p>
+                                        <p>فواتير النزلاء الحاليين</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/charts/flot.html" class="nav-link">
+                                    <a href="{{ route('trashedBills') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>تحويل غرفة</p>
+                                        <p>فواتير النزلاء المغادريين</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#roomRent">
+                                    <a href="{{ route('institutions') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>تسكين غرفة</p>
+                                        <p>المؤسسات و الشركات</p>
                                     </a>
                                 </li>
                             </ul>
@@ -183,9 +158,105 @@
 
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fa fa-user mr-3" aria-hidden="true"></i>
+                                <i class="nav-icon fas fa-hamburger mr-3" aria-hidden="true"></i>
                                 <p>
-                                    النزلاء
+                                    المطعم
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('meals') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>الوجبات</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>إضافة </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tshirt mr-3" aria-hidden="true"></i>
+                                <p>
+                                    المغسلة
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>عرض </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>إضافة </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-store-alt mr-3" aria-hidden="true"></i>
+                                <p>
+                                    المخزن
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>عرض </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>إضافة </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-cog mr-3" aria-hidden="true"></i>
+                                <p>
+                                    إدارة النظام
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <a href="{{ route('roomsprices') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>اسعار الغرف </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>إضافة </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-calculator mr-3" aria-hidden="true"></i>
+                                <p>
+                                    الحسابات
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -204,6 +275,7 @@
                                 </li>
                             </ul>
                         </li>
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -211,7 +283,8 @@
             <!-- /.sidebar -->
         </aside>
 
-        <div class="content-wrapper text-right" dir="rtl">
+        <div class="content-wrapper text-right pt-4" dir="rtl">
+            @include('layouts.mess')
             @yield('content')
         </div>
 
@@ -249,7 +322,6 @@
     <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- jQuery Knob Chart -->
-    <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
     <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -261,8 +333,8 @@
     <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('dist/js/adminlte.js') }}"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+
+    @stack('scripts')
 </body>
 
 </html>
