@@ -1,4 +1,4 @@
-@props(['room' => $room, 'guests' => $guests, 'roomprices' => $roomprices, 'institutions' => $institutions])
+@props(['room' => $room, 'guests' => $guests, 'roomprices' => $roomprices, 'institutions' => $institutions, 'meals' => $meals])
 
 @include('rooms.create')
 @include('rooms.edit')

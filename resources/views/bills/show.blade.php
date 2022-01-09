@@ -71,11 +71,11 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
                                         <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">رقم العملية</th>
                                         <th class="text-right" rowspan="1" colspan="1">البيان</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>
-                                        <th class="text-right" rowspan="1" colspan="1">رقم الفاتورة</th>
+                                        <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
                                     </tr>
                                 </tfoot>
                             </table>

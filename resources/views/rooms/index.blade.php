@@ -56,12 +56,13 @@
                     إضافة غرفة جديدة
                 </button>
             </div>
+            @include('rooms.create')
 
         </div>
         <div class="row pt-3">
             @if (count($rooms))
                 @foreach ($rooms as $room)
-                    <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions" />
+                    <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions" :meals="$meals" />
                 @endforeach
             @else
                 <p>لا توجد غرف حتى الآن</p>

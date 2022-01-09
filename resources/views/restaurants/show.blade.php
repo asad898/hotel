@@ -1,28 +1,14 @@
 @extends('layouts.app')
 @section('head')
-    <title>
-        فاتورة {{ $bill->guest->name }} @if ($bill->partner)
-                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }} - {{ $bill->institution->name }}
-    </title>
+    <title>Hotel - Restaurants - Bills</title>
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 @section('content')
-    @include('bills.delete')
     <div class="container-fluid">
-        <h4 class="text-center mb-2">
-            فاتورة {{ $bill->guest->name }} @if ($bill->partner)
-                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }}
-        </h4>
-        <h5 class="text-center mb-2">{{ $bill->institution->name }}</h5>
-        {{-- <div class="d-flex my-3">
-            <button type="button" class="btn btn-tool text-danger" data-toggle="modal"
-                data-target="#deleteBill{{ $bill->id }}">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div> --}}
+        <h1 class="text-center">فواتير المطعم</h1>
         <div class="row">
             <div class="card-body">
                 <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -34,48 +20,41 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="Engine version: activate to sort column ascending">التاريخ</th>
-                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
-                                            colspan="1" aria-sort="ascending"
-                                            aria-label="Rendering engine: activate to sort column descending">رقم العملية
-                                        </th>
+                                            aria-label="Engine version: activate to sort column ascending">التاريخ</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="Platform(s): activate to sort column ascending">البيان</th>
+                                            aria-label="CSS grade: activate to sort column ascending">رقم العملية</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="CSS grade: activate to sort column ascending">رقم الغرفة</th>
+                                            aria-label="Platform(s): activate to sort column ascending">الوجية</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                             aria-label="Browser: activate to sort column ascending">المبلغ</th>
+                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-sort="ascending"
+                                             aria-label="Rendering engine: activate to sort column descending">المجموع
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-right">
                                     @if (count($details))
-                                        @foreach ($details as $detail)
+                                        @foreach ($details as $bill)
                                             <tr class="odd">
-                                                <td>{{ $detail->created_at }}</td>
-                                                <td class="dtr-control sorting_1" tabindex="0">{{ $detail->id }}</td>
-                                                <td>{{ $detail->statment }}</td>
-                                                <td>{{ $detail->room->number }}</td>
-                                                <td>{{ $detail->price }}</td>
+                                                <td>{{ $bill->created_at }}</td>
+                                                <td class="dtr-control sorting_1" tabindex="0">{{ $bill->id }}</td>
+                                                <td>{{ $bill->meal->name }}</td>
+                                                <td>{{ $bill->meal->price }} * {{ $bill->amount }}</td>
+                                                <td>{{ $bill->meal->price * $bill->amount }}</td>
                                             </tr>
                                         @endforeach
-                                        <tr class="text-right">
-                                            <td class="text-center">المجموع</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ $bill->price }}</td>
-                                        </tr>
-                                        @else
-                                        <p>لا توجد فواتير حتى الآن</p>
-                                        @endif
-                                    </tbody>
-                                    <tfoot>
+                                    @else
+                                        <p>لا توجد فواتير مطعم حتى الآن</p>
+                                    @endif
+                                </tbody>
+                                <tfoot>
                                     <tr>
                                         <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم العملية</th>
-                                        <th class="text-right" rowspan="1" colspan="1">البيان</th>
-                                        <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>
+                                        <th class="text-right" rowspan="1" colspan="1">الوجية</th>
                                         <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">المجموع</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -121,5 +100,6 @@
                 "responsive": true,
             });
         });
+
     </script>
 @endpush

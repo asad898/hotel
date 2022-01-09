@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\BillDeta;
 use App\Models\Guest;
 use App\Models\Institution;
+use App\Models\Meal;
 use App\Models\Room;
 use App\Models\RoomPrice;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class RoomController extends Controller
     public function index(Request $request)
     {
         $guests = Guest::latest()->get();
+        $meals = Meal::latest()->get();
         $roomprices = RoomPrice::latest()->get();
         $institutions = Institution::latest()->get();
         $rooms = Room::where([
@@ -30,7 +32,7 @@ class RoomController extends Controller
         ->with(['guest', 'roomprice', 'partner', 'institution', 'user', 'bill'])
         ->orderBy("id", "asc")
         ->get();
-        return view('rooms.index', compact(['rooms', 'guests', 'roomprices', 'institutions']))
+        return view('rooms.index', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 

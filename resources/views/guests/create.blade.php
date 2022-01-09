@@ -20,7 +20,12 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="phone" class="font-weight-light">الهاتف</label>
-                            {{Form::text('phone', '', ['class' => 'form-control'])}}
+                            <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autofocus>
+                            @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                     </div>
 

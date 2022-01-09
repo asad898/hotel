@@ -172,9 +172,15 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                    <a href="{{ route('restaurants') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة </p>
+                                        <p>فواتير النزلاء الحاليين</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('restaurant.trashed') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>فواتير النزلاء المغادريين</p>
                                     </a>
                                 </li>
                             </ul>

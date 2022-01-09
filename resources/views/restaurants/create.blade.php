@@ -18,26 +18,30 @@
                                 value="{{ $room->guest->id }}" autofocus required>
                             <input name="room_id" type="hidden" class="form-control" id="room_id" placeholder=""
                                 value="{{ $room->id }}" autofocus required>
-                            <input name="statment" type="hidden" class="form-control" id="statment" placeholder=""
-                                value="إيجار الغرفة رقم {{ $room->number }}" autofocus required>
-                            <input name="price" type="hidden" class="form-control" id="price" placeholder=""
-                                value="" autofocus required>
+                            <input name="price" type="hidden" class="form-control" id="price" placeholder="" value=""
+                                autofocus required>
                             <input name="bill_id" type="hidden" class="form-control" id="bill_id" placeholder=""
                                 value="{{ $room->bill->id }}" autofocus required>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row mx-0">
                         <div class="form-group col-md-6">
-                            <input name="name" type="text" class="form-control" id="number" placeholder="الوجبة"
-                                value="{{ old('name') }}" autofocus required>
+                            <input name="meal_id" class="form-control" placeholder="رقم الوجبة" list="meals">
+                            <datalist id="meals">
+                                @if (count($meals))
+                                    @foreach ($meals as $meal)
+                                        <option value="{{ $meal->id }}">{{ $meal->name }}</option>
+                                    @endforeach
+                                @endif
+                            </datalist>
                         </div>
                         <div class="form-group col-md-6">
-                            <input name="number" type="text" class="form-control" id="number" placeholder="الكمية"
-                                value="{{ old('number') }}" autofocus required>
+                            <input name="amount" type="text" class="form-control" id="amount" placeholder="الكمية"
+                                value="{{ old('amount') }}" autofocus required>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="row m-0">
                     <input type="submit" class="btn btn-primary col-md-6 rounded-0 py-2" value="حفظ">

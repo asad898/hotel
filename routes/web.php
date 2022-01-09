@@ -79,4 +79,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meal.update');
     Route::delete('/meals/{meal}', [MealController::class, 'delete'])->name('meal.delete');
 
+    // Bills
+    Route::get('/restaurants', [RestBillController::class, 'index'])->name('restaurants');
+    Route::get('/restaurants/trashed', [RestBillController::class, 'trashed'])->name('restaurant.trashed');
+    Route::get('/restaurants/{id}', [RestBillController::class, 'show'])->name('restaurants.show');
+
 });
