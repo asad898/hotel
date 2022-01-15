@@ -13,7 +13,6 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group row mx-0">
-
                         <div class="form-group col-md-6">
                             <label for="name" class="font-weight-light">إسم النزيل</label>
                             {{Form::text('name', '',['class' => 'form-control'])}}

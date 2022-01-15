@@ -29,4 +29,8 @@ class Bill extends Model
     public function institution(){
         return $this->belongsTo(Institution::class);
     }
+
+    public function laundry(){
+        return $this->hasMany(Laundry::class);
+    }
 }

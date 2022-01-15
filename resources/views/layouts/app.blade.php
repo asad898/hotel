@@ -76,9 +76,14 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left text-right" style="right: inherit; right: 0px;">
-                            <a class="nav-link d-flex justify-content-between" href="#">
+                            <a class="nav-link d-flex justify-content-between" href="{{ route('users.show', auth()->user()->username) }}">
                                 <i class="fas fa-user mr-3"></i>
-                                <span class="float-right text-muted text-sm">تعديل بيانات الحساب</span>
+                                <span class="float-right text-muted text-sm">حساب {{ auth()->user()->username }}</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="nav-link d-flex justify-content-between" href="{{ route('register') }}">
+                                <i class="fas fa-users mr-3"></i>
+                                <span class="float-right text-muted text-sm">إنشاء مسخدم جديد</span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="nav-link d-flex justify-content-between" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -153,6 +158,12 @@
                                         <p>المؤسسات و الشركات</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('roomsprices') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>اسعار الغرف </p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
@@ -196,15 +207,21 @@
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('clothes') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>عرض </p>
+                                        <p>انوع الملابس</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                    <a href="{{ route('laundries') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة </p>
+                                        <p>فواتير النزلاء الحاليين</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('laundries.trashed') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>فواتير النزلاء المغادريين</p>
                                     </a>
                                 </li>
                             </ul>
@@ -243,12 +260,6 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
-                                <li class="nav-item">
-                                    <a href="{{ route('roomsprices') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>اسعار الغرف </p>
-                                    </a>
-                                </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
                                         <i class="far fa-circle nav-icon"></i>
@@ -341,6 +352,16 @@
     <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 
     @stack('scripts')
+
+    <!-- prevint submitting tow record in form -->
+    <script>
+        $("body").on("submit", "form", function() {
+            $(this).submit(function() {
+                return false;
+            });
+            return true;
+        });
+    </script>
 </body>
 
 </html>

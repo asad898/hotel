@@ -21,8 +21,8 @@ class GuestController extends Controller
             }]
         ])
             ->orderBy("id", "desc")
-            ->with('room')
-            ->paginate(21);
+            ->with(['room', 'roomPartner'])
+            ->paginate(9);
 
         return view('guests.index', compact('guests'))
             ->with(`i`, (request()->input('page', 1) - 1) * 5);
@@ -72,12 +72,21 @@ class GuestController extends Controller
 
     public function destroy(Guest $guest)
     {
-        //Check if post exists before deleting
-        if (!isset($guest)){
-            return redirect('/guests')->with('error', 'النزيل غير موجودة');
+        if ($guest->room){
+            return redirect('/guests')->with('warning', 'هذا النزيل ساكن لا يمكنك حذفه');
+        }elseif($guest->roomPartner){
+            return redirect('/guests')->with('warning', 'هذا النزيل مرافق لا يمكنك حذفه');
+        }
+        else{
+            //Check if post exists before deleting
+            if (!isset($guest)){
+                return redirect('/guests')->with('error', 'النزيل غير موجودة');
+            }
+    
+            $guest->delete();
+            return redirect('/guests')->with('danger', 'تم حذف النزيل');
+
         }
 
-        $guest->delete();
-        return redirect('/guests')->with('success', 'تم حذف النزيل');
     }
 }

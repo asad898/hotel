@@ -19,6 +19,7 @@
                         <input type="hidden" name="number" id="number" value="{{ $room->number }}"
                         class="form-control">
                         <input type="hidden" name="status" id="status" value="تحت التنظيف" class="form-control">
+                        <input type="hidden" name="leaving" id="leaving" value="1" class="form-control">
                     </div>
                     
                     <div class="form-group col-md-6">

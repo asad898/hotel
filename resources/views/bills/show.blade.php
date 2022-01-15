@@ -2,7 +2,7 @@
 @section('head')
     <title>
         فاتورة {{ $bill->guest->name }} @if ($bill->partner)
-                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }} - {{ $bill->room->institution->name }}
+                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }} - {{ $bill->institution->name }}
     </title>
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -16,7 +16,7 @@
             فاتورة {{ $bill->guest->name }} @if ($bill->partner)
                 +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }}
         </h4>
-        <h5 class="text-center mb-2">{{ $bill->room->institution->name }}</h5>
+        <h5 class="text-center mb-2">{{ $bill->institution->name }}</h5>
         {{-- <div class="d-flex my-3">
             <button type="button" class="btn btn-tool text-danger" data-toggle="modal"
                 data-target="#deleteBill{{ $bill->id }}">

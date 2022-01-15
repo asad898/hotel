@@ -20,7 +20,7 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Engine version: activate to sort column ascending">التاريخ</th>
+                                            aria-label="Engine version: activate to sort column ascending">تاريخ الوصول</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                             aria-label="CSS grade: activate to sort column ascending">رقم الفاتورة</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
@@ -51,12 +51,12 @@
                                             </tr>
                                         @endforeach
                                     @else
-                                        <p>لا توجد فواتير حتى الآن</p>
+                                        <p>لا توجد غرفة ساكنة</p>
                                     @endif
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">تاريخ الوصول</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الفاتورة</th>
                                         <th class="text-right" rowspan="1" colspan="1">النزيل</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>

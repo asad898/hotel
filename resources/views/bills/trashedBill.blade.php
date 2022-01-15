@@ -20,7 +20,7 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Engine version: activate to sort column ascending">التاريخ</th>
+                                            aria-label="Engine version: activate to sort column ascending">تاريخ المغادرة</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                             aria-label="CSS grade: activate to sort column ascending">رقم الفاتورة</th>
                                         <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
@@ -37,7 +37,7 @@
                                     @if (count($bills))
                                         @foreach ($bills as $bill)
                                             <tr class="odd">
-                                                <td>{{ $bill->created_at }}</td>
+                                                <td>{{ $bill->deleted_at }}</td>
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     {{ $bill->id }}
                                                 </td>
@@ -56,7 +56,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">تاريخ المغادرة</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الفاتورة</th>
                                         <th class="text-right" rowspan="1" colspan="1">النزيل</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>

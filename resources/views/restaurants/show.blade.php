@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('head')
-    <title>Hotel - Restaurants - Bills</title>
+    <title>
+        فاتورة {{ $bill->guest->name }} @if ($bill->partner)
+                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }} - {{ $bill->institution->name }}
+    </title>
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
@@ -8,7 +11,11 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h1 class="text-center">فواتير المطعم</h1>
+        <h4 class="text-center mb-2">
+            فاتورة {{ $bill->guest->name }} @if ($bill->partner)
+                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }}
+        </h4>
+        <h5 class="text-center mb-2">{{ $bill->institution->name }}</h5>
         <div class="row">
             <div class="card-body">
                 <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -35,13 +42,13 @@
                                 </thead>
                                 <tbody class="text-right">
                                     @if (count($details))
-                                        @foreach ($details as $bill)
+                                        @foreach ($details as $detail)
                                             <tr class="odd">
-                                                <td>{{ $bill->created_at }}</td>
-                                                <td class="dtr-control sorting_1" tabindex="0">{{ $bill->id }}</td>
-                                                <td>{{ $bill->meal->name }}</td>
-                                                <td>{{ $bill->meal->price }} * {{ $bill->amount }}</td>
-                                                <td>{{ $bill->meal->price * $bill->amount }}</td>
+                                                <td>{{ $detail->created_at }}</td>
+                                                <td class="dtr-control sorting_1" tabindex="0">{{ $detail->id }}</td>
+                                                <td>{{ $detail->meal->name }}</td>
+                                                <td>{{ $detail->meal->price }} * {{ $detail->amount }}</td>
+                                                <td>{{ $detail->meal->price * $detail->amount }}</td>
                                             </tr>
                                         @endforeach
                                     @else

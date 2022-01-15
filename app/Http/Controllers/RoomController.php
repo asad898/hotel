@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\BillDeta;
+use App\Models\Clothe;
 use App\Models\Guest;
 use App\Models\Institution;
 use App\Models\Meal;
@@ -11,14 +12,14 @@ use App\Models\Room;
 use App\Models\RoomPrice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
     public function index(Request $request)
     {
-        $guests = Guest::latest()->get();
+        $guests = Guest::latest()->with('room')->get();
         $meals = Meal::latest()->get();
+        $clothes = Clothe::latest()->get();
         $roomprices = RoomPrice::latest()->get();
         $institutions = Institution::latest()->get();
         $rooms = Room::where([
@@ -31,8 +32,8 @@ class RoomController extends Controller
         ])
         ->with(['guest', 'roomprice', 'partner', 'institution', 'user', 'bill'])
         ->orderBy("id", "asc")
-        ->get();
-        return view('rooms.index', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals']))
+        ->paginate(8);
+        return view('rooms.index', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals', 'clothes']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 
@@ -65,6 +66,7 @@ class RoomController extends Controller
             'roomprice_id' => '',
             'institution_id' => '',
             'user_id' => '',
+            'leaving' => '',
         ]);
 
         // Update Room
@@ -84,6 +86,7 @@ class RoomController extends Controller
         }
 
         $room->save();
+        // Rent Room
         // check if the opration is rent room or not
         if($request->input('guest_id')){
             $bill = new Bill;
@@ -106,15 +109,20 @@ class RoomController extends Controller
             $detail->bill_id = $bill->id;
             $detail->save();
 
+            $room->leaving = 1;
+            $room->save();
+
             return redirect('/rooms')->with('success', 'تم تسكين النزيل ');
         }
         // To leaving room
-        if($request->input('roomprice_id') == null && $request->input('guest_id') == null && $request->input('status') == "تحت التنظيف" ){ 
+        if($request->input('leaving') == 1 && $request->input('roomprice_id') == null && $request->input('guest_id') == null && $request->input('status') == "تحت التنظيف" ){ 
             //Leaving room by soft deleting bill and bill details
             //Check if post exists before soft deleting
             if (!isset($room->bill)){
                 return redirect('/rooms')->with('error', 'الفاتورة غير موجودة');
             }
+            $room->leaving = 0;
+            $room->save();
             $room->bill->details->each->delete();
             $room->bill->delete();
             return redirect('/rooms')->with('warning', 'لقد قمت بمغادرة نزيل'); // To check if room is empty or not

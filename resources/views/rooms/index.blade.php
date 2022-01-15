@@ -59,14 +59,18 @@
             @include('rooms.create')
 
         </div>
-        <div class="row pt-3">
+        <div class="row pt-5">
             @if (count($rooms))
                 @foreach ($rooms as $room)
-                    <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions" :meals="$meals" />
+                    <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
+                        :meals="$meals" :clothes="$clothes" />
                 @endforeach
-            @else
-                <p>لا توجد غرف حتى الآن</p>
-            @endif
         </div>
+        <div class="row mt-5 justify-content-center">
+            {{ $rooms->links() }}
+        </div>
+    @else
+        <p>لا توجد غرف </p>
+        @endif
     </div>
 @endsection

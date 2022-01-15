@@ -1,4 +1,9 @@
-@props(['room' => $room, 'guests' => $guests, 'roomprices' => $roomprices, 'institutions' => $institutions, 'meals' => $meals])
+@props(['room' => $room,
+             'guests' => $guests,
+                'roomprices' => $roomprices,
+                    'institutions' => $institutions,
+                        'meals' => $meals,
+                            'clothes' => $clothes])
 
 @include('rooms.create')
 @include('rooms.edit')
@@ -30,6 +35,7 @@
             @if ($room->status != 'تحت التنظيف' && $room->status != 'خارج الخدمة' && $room->status != 'جاهزة')
                 @include('rooms.roomUpdate')
                 @include('restaurants.create')
+                @include('laundries.create')
                 {{ $room->guest->name }}
                 @if ($room->partner_id != null)
                     + {{ $room->partner->name }}
@@ -60,6 +66,9 @@
                 </button>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#restBill{{ $room->id }}">
                     <i class="fas fa-fish"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#laundryBill{{ $room->id }}">
+                    <i class="fas fa-tshirt"></i>
                 </button>
             @endif
         </div>

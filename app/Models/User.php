@@ -19,9 +19,20 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
-        'email',
+        'tel',
+        'role',
         'password',5
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($user){
+            $user->profile()->create([
+                'user_id' => $user->id
+            ]);
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,6 +52,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function profile(){
+        return $this->hasOne(Profile::class);
+    }
 
     public function institutions()
     {

@@ -62,6 +62,8 @@
                             <!-- Add the bg color to the header using any of the bg-* classes -->
                             @if ($guest->room)
                                 <div class="widget-user-header bg-success">
+                            @elseif($guest->roomPartner)
+                                <div class="widget-user-header bg-success">
                             @else
                                 <div class="widget-user-header bg-info">
                             @endif
@@ -73,12 +75,17 @@
                                 <h3 class="widget-user-desc">{{ $guest->id }}</h3>
                                 <h3 class="widget-user-desc">{{ $guest->name }}</h3>
                                 <h4 class="widget-user-username">{{ $guest->institution }}</h4>
-                                <h5 class="widget-user-username">{{ $guest->phone }}</h5>
+                                <h5 class="widget-user-username">
+                                    {{ $guest->phone }}
+                                </h5>
+                                <p>
+                                    @if ($guest->room) ساكن {{ $guest->room->number }} @elseif($guest->roomPartner) مرافق {{ $guest->roomPartner->number }} @else غير ساكن @endif
+                                </p>
                                 <div class="d-flex mt-4 mb-2">
-                                    <button type="button" class="btn btn-tool" data-toggle="modal"
+                                    {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteGuest{{ $guest->id }}">
                                         <i class="fas fa-trash text-danger fa-lg"></i>
-                                    </button>
+                                    </button> --}}
                                     <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#editGuest{{ $guest->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>

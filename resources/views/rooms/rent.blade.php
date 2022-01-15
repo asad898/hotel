@@ -26,6 +26,7 @@
                                 @endif
                             </datalist>
                             <input type="hidden" name="number" id="number" value="{{ $room->number }}" class="form-control">
+                            <input type="hidden" name="leaving" id="leaving" value="1" class="form-control">
                             <input type="hidden" name="room_id" id="room_id" value="{{ $room->id }}" class="form-control">
                             <input type="hidden" name="status" id="status" value="ساكنة" class="form-control">
                             <input name="statment" type="hidden" class="form-control" id="statment" placeholder=""
@@ -38,7 +39,11 @@
                             <datalist id="guests">
                                 @if (count($guests))
                                     @foreach ($guests as $guest)
-                                        <option value="{{ $guest->id }}">{{$guest->name}} - {{ $guest->phone }}</option>
+                                        @if (!$guest->room)
+                                            @if (!$guest->roomPartner)
+                                                <option value="{{ $guest->id }}">{{$guest->name}} - {{ $guest->phone }}</option>
+                                            @endif
+                                        @endif
                                     @endforeach
                                 @endif
                             </datalist>
@@ -52,7 +57,11 @@
                             <datalist id="partner">
                                 @if (count($guests))
                                     @foreach ($guests as $guest)
-                                        <option value="{{ $guest->id }}">{{$guest->name}} - {{ $guest->phone }}</option>
+                                        @if (!$guest->room)
+                                            @if (!$guest->roomPartner)
+                                                <option value="{{ $guest->id }}">{{$guest->name}} - {{ $guest->phone }}</option>
+                                            @endif
+                                        @endif
                                     @endforeach
                                 @endif
                             </datalist>

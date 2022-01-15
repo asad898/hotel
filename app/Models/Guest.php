@@ -13,4 +13,10 @@ class Guest extends Model
     {
         return $this->hasOne(Room::class, 'guest_id');
     }
+
+    public function roomPartner()
+    {
+        return $this->hasOne(Room::class, 'partner_id');
+    }
+    
 }

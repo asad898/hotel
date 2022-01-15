@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillDetaController;
+use App\Http\Controllers\ClotheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\LaundryController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestBillController;
 use App\Http\Controllers\RoomPriceController;
+use App\Http\Controllers\UserProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,19 +72,42 @@ Route::middleware(['auth'])->group(function () {
     //Bill Details Routes
     Route::get('/bills/details', [BillDetaController::class, 'index'])->name('details');
     Route::post('/bills/details', [BillDetaController::class, 'store'])->name('detail.store');
-    Route::post('/bills/restBillStore', [BillDetaController::class, 'restBillStore'])->name('detail.restBillStore');
-
+    
     # Restaurant Routes
-
+    
     // Meals
     Route::get('/meals', [MealController::class, 'index'])->name('meals');
     Route::post('/meals', [MealController::class, 'store'])->name('meal.store');
     Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meal.update');
     Route::delete('/meals/{meal}', [MealController::class, 'delete'])->name('meal.delete');
-
+    
     // Bills
     Route::get('/restaurants', [RestBillController::class, 'index'])->name('restaurants');
     Route::get('/restaurants/trashed', [RestBillController::class, 'trashed'])->name('restaurant.trashed');
     Route::get('/restaurants/{id}', [RestBillController::class, 'show'])->name('restaurants.show');
+    Route::get('/restaurants/trashed/{id}', [RestBillController::class, 'showTrashed'])->name('restaurants.show.trashed');
+    Route::post('/bills/restBillStore', [BillDetaController::class, 'restBillStore'])->name('detail.restBillStore');
+
+    # Laundry Routes
+
+    // Clothes
+    Route::get('/clothes', [ClotheController::class, 'index'])->name('clothes');
+    Route::post('/clothes', [ClotheController::class, 'store'])->name('clothe.store');
+    Route::put('/clothes/{clothe}', [ClotheController::class, 'update'])->name('clothe.update');
+    Route::delete('/clothes/{clothe}', [ClotheController::class, 'destroy'])->name('clothe.delete');
+
+    // Bills
+    Route::get('/laundries', [LaundryController::class, 'index'])->name('laundries');
+    Route::get('/laundries/trashed', [LaundryController::class, 'trashed'])->name('laundries.trashed');
+    Route::get('/laundries/{id}', [LaundryController::class, 'show'])->name('laundries.show');
+    Route::get('/laundries/trashed/{id}', [LaundryController::class, 'showTrashed'])->name('laundries.show.trashed');
+    Route::post('/laundries/store', [BillDetaController::class, 'laundryBill'])->name('laundries.store');
+
+    # User Profile Routes
+    Route::get('/users', [UserProfileController::class, 'index'])->name('users');
+    Route::get('/users/{user:username}', [UserProfileController::class, 'show'])->name('users.show');
+    Route::get('/users/edit/{user:username}', [UserProfileController::class, 'edit'])->name('users.edit');
+    Route::put('/users/edit/{user:username}', [UserProfileController::class, 'update'])->name('users.update');
+
 
 });
