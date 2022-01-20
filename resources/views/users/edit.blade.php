@@ -26,57 +26,64 @@
 @endsection
 @section('content')
     <div class="container-fluid mt-3">
+        <h5 class="text-center">تعديل البيانات</h5>
         {!! Form::open(['route' => ['users.update', $user->username], 'method' => 'POST', 'enctype' => 'multipart/form-data', 'class' => 'text-right']) !!}
-            @csrf
-            @method('PUT')
-            <div class="card-body">
-                <div class="row">
-                    <div class="form-group col-md-2">
-                        <label for="telId">الرقم التعريفي</label>
-                        <input type="text" disabled value="{{ $user->id }}" class="form-control" id="telId" placeholder="">
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="address">الاسم</label>
-                        <input name="username" type="text" value="{{ $user->username }}" class="form-control" id="emailId" placeholder="">
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="telId">رقم الهاتف</label>
-                        <input name="tel" type="text" value="{{ $user->tel }}" class="form-control" id="telId" placeholder="">
-                    </div>
-                    <input name="role" type="hidden" value="{{ $user->role }}" class="form-control" id="roleId" placeholder="">
+        @csrf
+        @method('PUT')
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <label for="telId">الرقم التعريفي</label>
+                    <input type="text" disabled value="{{ $user->id }}" class="form-control" id="telId" placeholder="">
                 </div>
-
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label for="education">التعليم</label>
-                        <input name="education" type="text" value="{{ $user->profile->education }}" class="form-control" id="education" placeholder="">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="address">العنوان</label>
-                        <input name="address" type="text" value="{{ $user->profile->address }}" class="form-control" id="address" placeholder="">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="skill">المهارات</label>
-                        <input name="skill" type="text" value="{{ $user->profile->skill }}" class="form-control" id="skill" placeholder="">
-                    </div>
+                <div class="form-group col-md-5">
+                    <label for="address">الاسم</label>
+                    <input name="username" type="text" value="{{ $user->username }}" class="form-control" id="emailId"
+                        placeholder="">
                 </div>
-                <div class="row align-items-end">
-                    <div class="col-md-9">
-                        <textarea name="note" class="form-control" id="aboutMe" rows="5">
-                            {{ $user->profile->note }}
-                        </textarea>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-primary">تغير كلمة المرور</a>
-                    </div>
+                <div class="form-group col-md-5">
+                    <label for="telId">رقم الهاتف</label>
+                    <input name="tel" type="text" value="{{ $user->tel }}" class="form-control" id="telId"
+                        placeholder="">
                 </div>
-
+                <input name="role" type="hidden" value="{{ $user->role }}" class="form-control" id="roleId"
+                    placeholder="">
             </div>
-            <!-- /.card-body -->
 
-            <div class="">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="education">التعليم</label>
+                    <input name="education" type="text" value="{{ $user->profile->education }}" class="form-control"
+                        id="education" placeholder="">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="address">العنوان</label>
+                    <input name="address" type="text" value="{{ $user->profile->address }}" class="form-control"
+                        id="address" placeholder="">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="skill">المهارات</label>
+                    <input name="skill" type="text" value="{{ $user->profile->skill }}" class="form-control" id="skill"
+                        placeholder="">
+                </div>
+            </div>
+            <div class="row align-items-end">
+                <div class="col-md-9">
+                    <textarea name="note" class="form-control" id="aboutMe" rows="5">
+                        {{ $user->profile->note }}
+                    </textarea>
+                </div>
+                <div class="col-md-3">
+
+                </div>
+            </div>
+
+            <div class="row mt-3">
                 <button type="submit" class="btn btn-primary">حفظ</button>
             </div>
+        </div>
+        <!-- /.card-body -->
+
         {!! Form::close() !!}
     </div>
 @endsection

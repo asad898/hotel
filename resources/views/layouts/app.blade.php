@@ -250,25 +250,27 @@
                                 </li>
                             </ul>
                         </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-cog mr-3" aria-hidden="true"></i>
-                                <p>
-                                    إدارة النظام
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview" style="display: none;">
+                        @auth
+                            @if (auth()->user()->role == "Manager")
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة </p>
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fa fa-cog mr-3" aria-hidden="true"></i>
+                                        <p>
+                                            إدارة النظام
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
                                     </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        <li class="nav-item">
+                                            <a href="{{ route('users') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>عرض المستخدمين</p>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                            </ul>
-                        </li>
-
+                            @endif
+                        @endauth
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa fa-calculator mr-3" aria-hidden="true"></i>

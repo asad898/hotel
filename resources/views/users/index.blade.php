@@ -50,15 +50,19 @@
                                                 <td>{{ $user->username }}</td>
                                                 <td>{{ $user->role }}</td>
                                                 <td>
-                                                    <a href="#">
-                                                        {{ $user->email }}
-                                                    </a>
+                                                    {{ $user->tel }}
                                                 </td>
                                                 <td class="text-center">
-                                                    <button type="button" class="btn btn-tool" data-toggle="modal"
-                                                        data-target="#deleteGuest">
-                                                        <i class="fas fa-trash text-danger fa-lg"></i>
-                                                    </button>
+                                                    <a href="{{ route('users.show', $user->username) }}" class="btn btn-tool">
+                                                        <i class="fa fa-address-card fa-lg text-primary" aria-hidden="true"></i>
+                                                    </a>
+                                                    @if (auth()->user()->role == "Manager")
+                                                        @include('users.delete')
+                                                        <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                            data-target="#deleteUser{{ $user->id }}">
+                                                            <i class="fas fa-trash text-danger fa-lg"></i>
+                                                        </button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -50,8 +50,20 @@
                                 تاريخ إنشاء الحساب : <b>{{ $user->created_at }}  |  {{ $user->created_at->diffForHumans() }}</b>
                             </li>
                         </ul>
-
-                        <a href="{{ route('users.edit', $user->username) }}" class="btn btn-primary btn-block"><b>تعديل البيانات</b></a>
+                        @if(auth()->user()->id == $user->id)
+                            <div class="d-flex">
+                                <div class="col-md-6">
+                                    @include('users.changPassword')
+                                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#updatePass{{ $user->id }}">
+                                        <i class="fa fa-key"></i>
+                                        تغير كلمة المرور
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('users.edit', $user->username) }}" class="btn btn-primary btn-block"><b>تعديل البيانات</b></a>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <!-- /.card-body -->
                 </div>

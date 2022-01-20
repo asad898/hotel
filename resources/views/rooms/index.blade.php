@@ -63,7 +63,7 @@
             @if (count($rooms))
                 @foreach ($rooms as $room)
                     <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
-                        :meals="$meals" :clothes="$clothes" />
+                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" />
                 @endforeach
         </div>
         <div class="row mt-5 justify-content-center">

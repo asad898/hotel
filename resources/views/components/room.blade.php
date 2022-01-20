@@ -3,11 +3,12 @@
                 'roomprices' => $roomprices,
                     'institutions' => $institutions,
                         'meals' => $meals,
-                            'clothes' => $clothes])
+                            'clothes' => $clothes,
+                            'roomall' => $roomall])
 
 @include('rooms.create')
 @include('rooms.edit')
-@include('rooms.delete')
+{{-- @include('rooms.delete') --}}
 @include('rooms.rent')
 <!-- card -->
 <div class="col-md-3">
@@ -36,12 +37,17 @@
                 @include('rooms.roomUpdate')
                 @include('restaurants.create')
                 @include('laundries.create')
-                {{ $room->guest->name }}
+                @include('rooms.changeRoom')
+                @include('rooms.changeRoomPrice')
+                <p class="mt-2">النزيل : {{ $room->guest->name }}</p>
                 @if ($room->partner_id != null)
-                    + {{ $room->partner->name }}
+                    <p>المرافق : {{ $room->partner->name }}</p>
+                @else
+                    <p>لا يوجد مرافق</p>
                 @endif
             @else
-                {{ $room->status }}
+                <p class="mt-2">{{ $room->status }}</p>
+                <p class="mt-2">غير ساكنة</p>
             @endif
         </h3>
         <!-- /.card-tools -->
@@ -49,9 +55,9 @@
     <!-- /.card-header -->
     <div class="card-body text-dark" style="display: none;">
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#deleteRoom{{ $room->id }}">
+            {{-- <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#deleteRoom{{ $room->id }}">
                 <i class="fas fa-trash"></i>
-            </button>
+            </button> --}}
             @if (!$room->guest_id)
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#updataRoom{{ $room->id }}">
                     <i class="fas fa-edit"></i>
@@ -61,8 +67,14 @@
                 <a href="{{ route('bill.show', $room->bill->id) }}" class="btn btn-tool">
                     <i class="fas fa-print" aria-hidden="true"></i>
                 </a>
+                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#changeRoomPrice{{ $room->id }}">
+                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                </button>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#roomUpdate{{ $room->id }}">
                     <i class="far fa-bookmark"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#changeRoom{{ $room->id }}">
+                    <i class="fas fa-sync-alt"></i>
                 </button>
                 <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#restBill{{ $room->id }}">
                     <i class="fas fa-fish"></i>

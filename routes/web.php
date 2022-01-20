@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\BillDetaController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ClotheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
@@ -42,11 +43,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/rooms', [RoomController::class, 'store'])->name('room.store');
     Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('room.update');
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('room.delete');
+
+    // Change Room
+    Route::put('/rooms/change/{room}', [RoomController::class, 'changeRoom'])->name('room.change');
+    
+    //change Room Price
+    Route::put('/rooms/price/{room}', [RoomController::class, 'changePrice'])->name('room.price');
+    
     // Room pricing Routes
     Route::get('/roomsprices', [RoomPriceController::class, 'index'])->name('roomsprices');
     Route::post('/roomsprices', [RoomPriceController::class, 'store'])->name('roomprice.store');
     Route::put('/roomsprices/{roomprice}', [RoomPriceController::class, 'update'])->name('roomprice.update');
     Route::delete('/roomsprices/{roomprice}', [RoomPriceController::class, 'destroy'])->name('roomprice.delete');
+
     // Institutions Routes
     Route::get('/institutions', [InstitutionController::class, 'index'])->name('institutions');
     Route::post('/institutions', [InstitutionController::class, 'store'])->name('institution.store');
@@ -108,6 +117,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{user:username}', [UserProfileController::class, 'show'])->name('users.show');
     Route::get('/users/edit/{user:username}', [UserProfileController::class, 'edit'])->name('users.edit');
     Route::put('/users/edit/{user:username}', [UserProfileController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user:username}', [UserProfileController::class, 'destroy'])->name('users.destroy');
+
+    # Change Passowrd Routes
+    Route::get('change-password', [ChangePasswordController::class, 'index']);
+    Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
 
 
 });

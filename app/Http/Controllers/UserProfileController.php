@@ -84,8 +84,15 @@ class UserProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        //Check if post exists before deleting
+        if (!isset($user)){
+            return redirect('/users')->with('error', 'المستخدم غير موجودة');
+        }
+        
+        $user->profile()->delete();
+        $user->delete();
+        return redirect('users')->with('danger', 'تم حذف المستخدم');
     }
 }
