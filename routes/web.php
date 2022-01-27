@@ -9,10 +9,13 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\LaundryController;
+use App\Http\Controllers\LedgerController;
+use App\Http\Controllers\MainAccountController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestBillController;
 use App\Http\Controllers\RoomPriceController;
+use App\Http\Controllers\SubAccountController;
 use App\Http\Controllers\UserProfileController;
 
 /*
@@ -123,5 +126,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('change-password', [ChangePasswordController::class, 'index']);
     Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
 
+
+    // Accounting Route
+
+    # Main Account Route
+    Route::get('/main/account', [MainAccountController::class, 'index'])->name('main.accounts');
+    Route::get('/main/accounts/{mainAccount}', [MainAccountController::class, 'show'])->name('main.accounts.show');
+    # Sub Account Route
+    Route::post('/main/accounts', [SubAccountController::class, 'store'])->name('sub.store');
+    # Budget Equation
+    Route::get('/budget/account', [MainAccountController::class, 'budget'])->name('budget.accounts');
+    #Pay Route قيد صرف او دفع
+    Route::get('/pay', [LedgerController::class, 'createPay'])->name('pay.create');
+    Route::post('/pay/store', [LedgerController::class, 'pay'])->name('pay.store');
+    # دفتر اليومية
+    Route::get('/journal', [LedgerController::class, 'index'])->name('journal.index');
+    # دفتر الاستاذ
+    Route::get('/single', [LedgerController::class, 'single'])->name('journal.single');
+    # الميزان
+    Route::get('/balance', [LedgerController::class, 'balance'])->name('journal.balance');
+    #قائمة الدخل
+    Route::get('/income', [LedgerController::class, 'income'])->name('journal.income');
+    # قائمة المركز المالي
+    Route::get('/income/statement', [LedgerController::class, 'incomeStatement'])->name('statement.income');
 
 });

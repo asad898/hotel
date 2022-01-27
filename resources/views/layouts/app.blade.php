@@ -53,6 +53,9 @@
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{{ route('home') }}" class="nav-link">الرئيسية</a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('main.accounts') }}" class="nav-link">الحسابات</a>
+                </li>
             </ul>
 
             <!-- Right navbar links -->
@@ -281,15 +284,47 @@
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('pay.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>عرض النزلاء</p>
+                                        <p>إنشاء قيد
+
+                                        </p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                    <a href="{{ route('main.accounts') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة نزيل</p>
+                                        <p>الحسابات الرئيسية</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('journal.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>دفتر اليومية</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('journal.single') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>دفتر الاستاذ</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('journal.balance') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>ميزان المراحعة</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('journal.income') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>قائمة الدخل</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('statement.income') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>قائمة  المركز المالي</p>
                                     </a>
                                 </li>
                             </ul>
