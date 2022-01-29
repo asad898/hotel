@@ -15,6 +15,9 @@ use App\Http\Controllers\MealController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestBillController;
 use App\Http\Controllers\RoomPriceController;
+use App\Http\Controllers\StoreBillController;
+use App\Http\Controllers\StoreBillDetaController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SubAccountController;
 use App\Http\Controllers\UserProfileController;
 
@@ -100,6 +103,33 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/restaurants/trashed/{id}', [RestBillController::class, 'showTrashed'])->name('restaurants.show.trashed');
     Route::post('/bills/restBillStore', [BillDetaController::class, 'restBillStore'])->name('detail.restBillStore');
 
+    # Store Routes
+
+    Route::get('/stores', [StoreController::class, 'index'])->name('stores');
+    Route::post('/stores', [StoreController::class, 'store'])->name('store.store');
+    Route::put('/stores/{store}', [StoreController::class, 'update'])->name('store.update');
+    
+    // Store pay bills
+    Route::put('/stores/pay/{store}', [StoreController::class, 'payItem'])->name('store.payItem');
+
+    // Store sell Bills
+    Route::get('/sell', [StoreController::class, 'sell'])->name('sell.create');
+    Route::post('/store', [StoreBillController::class, 'store'])->name('store.bill.store');
+    Route::get('/store/{storeBill}', [StoreBillController::class, 'show'])->name('store.bill.show');
+    // ترحيل فواتير المخزن
+    Route::delete('/store/move/{storeBill}', [StoreBillController::class, 'destroy'])->name('store.bill.delete');
+    // فواتير مرحلة
+    Route::get('/store/saved/bill', [StoreBillController::class, 'trashed'])->name('store.bill.trashed');
+    Route::get('/store/show/saved/{id}', [StoreBillController::class, 'trashedShow'])->name('store.bill.trashed.show');
+    // فواتير غير مرحلة
+    Route::get('/store/unsaved/bill', [StoreBillController::class, 'unsaved'])->name('store.bill.unsaved');
+    Route::get('/store/show/unsaved/{id}', [StoreBillController::class, 'unsavedShow'])->name('store.bill.unsaved.show');
+    // حذف الفواتير غير المرحلة
+    Route::delete('/store/delete/{storeBill}', [StoreBillController::class, 'unsavedDelete'])->name('store.unsaved.delete');
+
+    // Store Bill details
+    Route::post('/store/detail', [StoreBillDetaController::class, 'store'])->name('deta.bill.store');
+
     # Laundry Routes
 
     // Clothes
@@ -133,12 +163,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/main/account', [MainAccountController::class, 'index'])->name('main.accounts');
     Route::get('/main/accounts/{mainAccount}', [MainAccountController::class, 'show'])->name('main.accounts.show');
     # Sub Account Route
-    Route::post('/main/accounts', [SubAccountController::class, 'store'])->name('sub.store');
+    Route::post('/sub/accounts', [SubAccountController::class, 'store'])->name('sub.store');
+    Route::put('/sub/update/{subAccount}', [SubAccountController::class, 'update'])->name('sub.update');
     # Budget Equation
     Route::get('/budget/account', [MainAccountController::class, 'budget'])->name('budget.accounts');
     #Pay Route قيد صرف او دفع
     Route::get('/pay', [LedgerController::class, 'createPay'])->name('pay.create');
     Route::post('/pay/store', [LedgerController::class, 'pay'])->name('pay.store');
+    # delete pay حذف قيد
+    Route::delete('/delete/pay/{ledger}', [LedgerController::class, 'destroy'])->name('pay.destroy');
     # دفتر اليومية
     Route::get('/journal', [LedgerController::class, 'index'])->name('journal.index');
     # دفتر الاستاذ

@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Room::class);
     }
+
+    public function storeBills()
+    {
+        return $this->hasMany(StoreBill::class, 'user_id');
+    }
 }

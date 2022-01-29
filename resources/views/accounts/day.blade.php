@@ -14,11 +14,18 @@
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h3 class="text-center mb-3">دفتر اليومية</h3>
-        <div class="col-md-12 mb-2">
+        <h3 class="text-center my-4">دفتر اليومية</h3>
+        <div class="d-flex my-3">
+            @if ($from)
+                من {{ $from }} &nbsp; الى
+            @endif
+            &nbsp;{{ $to }}
+        </div>
+        <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('journal.index') }}" method="GET" role="search">
                 <div class="row">
                     <div class="d-flex m-2">
@@ -36,10 +43,10 @@
             </form>
         </div>
         @if (count($entrys))
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table class="table table-hover">
@@ -50,10 +57,12 @@
                                     <th style="width: 40px">مبالغ مدينة</th>
                                     <th>البيان</th>
                                     <th style="width: 150px">التاريخ</th>
+                                    <th class="unprint text-center">#</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($entrys as $entry)
+                                    @include('accounts.pay.delete')
                                     <tr class="table-warning">
                                         <td>{{ $entry->id }}</td>
                                         <td></td>
@@ -61,15 +70,20 @@
                                         </td>
                                         <td>{{ $entry->statement }}</td>
                                         <td></td>
+                                        <td class="unprint text-center">
+                                            <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                data-target="#deleteEntry{{ $entry->id }}">
+                                                <i class="fas fa-trash text-danger fa-lg"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td>{{ $entry->c_amount }}</td>
-                                        <td>
-
-                                        </td>
+                                        <td></td>
                                         <td>من ح/ {{ $entry->dAccount->name }}</td>
                                         <td>{{ $entry->created_at->format('d/m/Y') }}</td>
+                                        <td class="unprint"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
@@ -79,6 +93,7 @@
                                         </td>
                                         <td>الى ح/ {{ $entry->cAccount->name }}</td>
                                         <td>{{ $entry->created_at->format('d/m/Y') }}</td>
+                                        <td class="unprint"></td>
                                     </tr>
                                 @endforeach
                                 <tr class="table-primary">
@@ -87,6 +102,7 @@
                                     <td><b>{{ $debitSum }}</b></td>
                                     <td></td>
                                     <td></td>
+                                    <td class="unprint"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -97,6 +113,6 @@
                     </div>
                 </div>
             </div>
-            @endif
+        @endif
     </div>
 @endsection

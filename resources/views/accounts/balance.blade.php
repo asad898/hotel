@@ -6,7 +6,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>ميزان المراحعة</title>
+    <title class="unprint">ميزان المراجعة</title>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
@@ -17,8 +17,14 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h3 class="text-center mb-3">ميزان المراحعة</h3>
-        <div class="col-md-12 mb-2">
+        <h3 class="text-center my-4">ميزان المراجعة</h3>
+        <div class="d-flex my-3">
+            @if ($from)
+                من {{ $from }} &nbsp; الى
+            @endif
+            &nbsp;{{ $to }}
+        </div>
+        <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('journal.balance') }}" method="GET" role="search">
                 <div class="row">
                     <div class="d-flex m-2">
@@ -53,21 +59,24 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($myA as $my)
-                                        <tr>
-                                            <td>
-                                                @if ($my['state'] == 'credit')
-                                                    {{ $my['price'] }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($my['state'] == 'debit')
-                                                    {{ $my['price'] }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $my['name'] }}
-                                            </td>
-                                        </tr>
+                                        @if ($my['price'] != 0)
+                                            <tr>
+                                                <td>
+                                                    @if ($my['state'] == 'credit')
+                                                        {{ $my['price'] }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($my['state'] == 'debit')
+                                                        {{ $my['price'] }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{ $my['name'] }}
+                                                </td>
+                                            </tr>
+
+                                        @endif
 
                                     @endforeach
                                     <tr class="table-primary">

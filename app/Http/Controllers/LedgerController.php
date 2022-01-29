@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ledger;
 use App\Models\MainAccount;
 use App\Models\SubAccount;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,22 +14,35 @@ class LedgerController extends Controller
     #اليومية
     public function index(Request $request)
     {
-        $from = $request->from;
-        $to = $request->to;
+        if($request->from){
+            $from = $request->from;
+        }else{
+            $from = date('Y-m-d');
+        }
+        if($request->to){
+            $to = $request->to;
+        }else{
+            $to = date('Y-m-d');
+        }
         $entrys = Ledger::whereRaw(
             "(created_at >= ? AND created_at <= ?)",
             [
                 $from . " 00:00:00",
                 $to . " 23:59:59"
             ]
-        )->get();
+        )->with(['dAccount','cAccount'])->latest()->get();
         $creditSum = 0;
         $debitSum = 0;
         foreach ($entrys as $entry) {
             $creditSum += $entry->c_amount;
             $debitSum += $entry->d_amount;
         }
-        return view('accounts.day')->with('entrys', $entrys)->with('creditSum', $creditSum)->with('debitSum', $debitSum);
+        return view('accounts.day')
+        ->with('entrys', $entrys)
+        ->with('creditSum', $creditSum)
+        ->with('debitSum', $debitSum)
+        ->with('from', $from)
+        ->with('to', $to);
     }
 
     #الاستاذ
@@ -50,7 +64,7 @@ class LedgerController extends Controller
                 $from . " 00:00:00",
                 $to . " 23:59:59"
             ]
-        )->get();
+        )->with(['dAccount','cAccount'])->get();
         $creditSum = 0;
         $debitSum = 0;
         foreach ($entrys as $entry) {
@@ -75,7 +89,9 @@ class LedgerController extends Controller
             ->with('accounts', $accounts)
             ->with('account1', $account1)
             ->with('stage', $stage)
-            ->with('bigSum', $bigSum);
+            ->with('bigSum', $bigSum)
+            ->with('from', $from)
+            ->with('to', $to);
     }
 
     #ميزان المراجعة
@@ -83,8 +99,16 @@ class LedgerController extends Controller
     {
         $accounts = SubAccount::get();
         $myA = array();
-        $from = $request->from;
-        $to = $request->to;
+        if($request->from){
+            $from = $request->from;
+        }else{
+            $from = date('Y-m-d');
+        }
+        if($request->to){
+            $to = $request->to;
+        }else{
+            $to = date('Y-m-d');
+        }
         $sum1 = 0;
         $sum2 = 0;
         foreach ($accounts as $account) {
@@ -131,7 +155,8 @@ class LedgerController extends Controller
         ->with('sum2', $sum2)
         ->with('sum1', $sum1)
         ->with('entrys', $entrys)
-        ->with('to', $to);
+        ->with('to', $to)
+        ->with('from', $from);
     }
 
     # قائمة الدخل
@@ -140,8 +165,16 @@ class LedgerController extends Controller
         $accounts = SubAccount::get();
         $myA = array();
         $myB = array();
-        $from = $request->from;
-        $to = $request->to;
+        if($request->from){
+            $from = $request->from;
+        }else{
+            $from = date('Y-m-d');
+        }
+        if($request->to){
+            $to = $request->to;
+        }else{
+            $to = date('Y-m-d');
+        }
         $sum1 = 0;
         $sum2 = 0;
         foreach ($accounts as $account) {
@@ -209,8 +242,16 @@ class LedgerController extends Controller
         $myB = array();
         $myC = array();
         $myD = array();
-        $from = $request->from;
-        $to = $request->to;
+        if($request->from){
+            $from = $request->from;
+        }else{
+            $from = date('Y-m-d');
+        }
+        if($request->to){
+            $to = $request->to;
+        }else{
+            $to = date('Y-m-d');
+        }
         $sum1 = 0;
         $sum2 = 0;
         $sum3 = 0;
@@ -361,23 +402,18 @@ class LedgerController extends Controller
         $pay->user_id = Auth::user()->id;
         $pay->save();
 
-        // #debit +
-        // $debit = SubAccount::find($pay->debit);
-        // $debit->price = $debit->price + $request->input('price');
-        // $debit->save();
-        // $dMain = MainAccount::find($debit->main_accounts_id);
-        // $dMain->price = $dMain->price + $request->input('price');
-        // $dMain->save();
+        return redirect('/pay')->with('success', 'تم انشاء قيد جديد');
+    }
 
-        // #credit -
-        // $credit = SubAccount::find($pay->credit);
-        // $credit->price = $credit->price - $request->input('price');
-        // $credit->save();
-        // $cMain = MainAccount::find($credit->main_accounts_id);
-        // $cMain->price = $cMain->price - $request->input('price');
-        // $cMain->save();
+    public function destroy(Ledger $ledger)
+    {
+        //Check if ledger exists before deleting
+        if (!isset($ledger)){
+            return redirect('/journal')->with('error', 'لا يوجد قيد بهذا الرقم');
+        }
 
+        $ledger->delete();
 
-        return redirect('/pay')->with('success', 'تم انشاء القيد جديد');
+        return redirect('/journal')->with('danger', 'تم حذف القيد');
     }
 }

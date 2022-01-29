@@ -17,8 +17,8 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h3 class="text-center mb-3">دفتر الاستاذ</h3>
-        <div class="col-md-12 mb-2">
+        <h3 class="text-center my-4 unprint">دفتر الاستاذ</h3>
+        <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('journal.single') }}" method="GET" role="search">
                 <div class="row">
                     <div class="d-flex m-2">
@@ -51,11 +51,17 @@
                 @foreach ($accounts as $account)
                     @if ($account->id == $account1)
                         <h4 class="text-center my-3">
-                            {{ $account->name }}
+                            حساب {{ $account->name }}
                         </h4>
                     @endif
                 @endforeach
             @endif
+            <div class="d-flex justify-content-center my-3">
+                @if ($from)
+                    من {{ $from }} &nbsp; الى
+                @endif
+                &nbsp;{{ $to }}
+            </div>
             <div class="row m-0 justify-content-center">
                 <div class="card col-md-6">
                     <div class="card-header">

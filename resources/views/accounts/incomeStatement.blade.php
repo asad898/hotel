@@ -16,9 +16,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 @endsection
 @section('content')
-    <div class="container-fluid justify-content-center row m-0">
-        <h3 class="text-center mb-3">قائمة المركز المالي</h3>
-        <div class="col-md-12 mb-2">
+    <div class="container-fluid m-0">
+        <h3 class="text-center my-4">قائمة المركز المالي</h3>
+        <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('statement.income') }}" method="GET" role="search">
                 <div class="row">
                     <div class="d-flex m-2">
@@ -34,6 +34,12 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="d-flex justify-content-center my-3">
+            @if ($from)
+                من {{ $from }} &nbsp; الى
+            @endif
+            &nbsp;{{ $to }}
         </div>
         @if ($to)
             <div class="row col-md-12 m-0 justify-content-center">

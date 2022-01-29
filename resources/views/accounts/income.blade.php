@@ -16,9 +16,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 @endsection
 @section('content')
-    <div class="container-fluid justify-content-center row m-0">
-        <h3 class="text-center mb-3">قائمة الدخل</h3>
-        <div class="col-md-12 mb-2">
+    <div class="container-fluid m-0">
+        <h3 class="text-center my-4">قائمة الدخل</h3>
+        <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('journal.income') }}" method="GET" role="search">
                 <div class="row">
                     <div class="d-flex m-2">
@@ -35,71 +35,75 @@
                 </div>
             </form>
         </div>
-        @if ($to)
-            <div class="d-flex my-3">
-                @if ($from)
-                    من {{ $from }} &nbsp; الى
-                @else
-                    بداية النشاط /
-                @endif
-                &nbsp;{{ $to }}
-            </div>
-            <div class="card col-md-10">
-                <div class="card-header">
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr class="text-center table-danger">
-                                <td></td>
-                                <td><b>الإيرادات</b></td>
-                                <td></td>
-                            </tr>
-                            @foreach ($myA as $item)
+        <div class="d-flex justify-content-center my-3">
+            @if ($from)
+                من {{ $from }} &nbsp; الى
+            @endif
+            &nbsp;{{ $to }}
+        </div>
+        <div class="row justify-content-center">
+            @if ($to)
+                <div class="card col-md-10">
+                    <div class="card-header">
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr class="text-center table-danger">
+                                    <td></td>
+                                    <td><b>الإيرادات</b></td>
+                                    <td></td>
+                                </tr>
+                                @foreach ($myA as $item)
+                                    @if ($item['price'])
+                                        <tr>
+                                            <td>{{ $item['price'] }}</td>
+                                            <td></td>
+                                            <td>{{ $item['name'] }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                                 <tr>
-                                    <td>{{ $item['price'] }}</td>
+                                    <td>{{ $sum1 }}</td>
                                     <td></td>
-                                    <td>{{ $item['name'] }}</td>
+                                    <td><b>اجمالي الإيرادات</b></td>
                                 </tr>
-                            @endforeach
-                            <tr>
-                                <td>{{ $sum1 }}</td>
-                                <td></td>
-                                <td><b>اجمالي الإيرادات</b></td>
-                            </tr>
-                            <tr class="text-center table-danger">
-                                <td></td>
-                                <td><b>المصروفات<b></td>
-                                <td></td>
-                            </tr>
-                            @foreach ($myB as $item)
-                                <tr class="">
+                                <tr class="text-center table-danger">
                                     <td></td>
-                                    <td>{{ $item['price'] }}</td>
-                                    <td>{{ $item['name'] }}</td>
+                                    <td><b>المصروفات<b></td>
+                                    <td></td>
                                 </tr>
-                            @endforeach
-                            <tr>
-                                <td></td>
-                                <td>{{ $sum2 }}</td>
-                                <td><b>اجمالي المصروفات</b></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    @if ($sum1 > $sum2)
-                        <h3 class="mt-5">صافي ربح {{ $sum1 - $sum2 }}</h3>
-                    @elseif($sum2 > $sum1)
-                        <h3 class="mt-5">صافي خسارة {{ $sum1 - $sum2 }}</h3>
-                    @else
-                        <h3 class="mt-5">الجانبان متساويان</h3>
-                    @endif
+                                @foreach ($myB as $item)
+                                    @if ($item['price'])
+                                        <tr class="">
+                                            <td></td>
+                                            <td>{{ $item['price'] }}</td>
+                                            <td>{{ $item['name'] }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                <tr>
+                                    <td></td>
+                                    <td>{{ $sum2 }}</td>
+                                    <td><b>اجمالي المصروفات</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        @if ($sum1 > $sum2)
+                            <h3 class="mt-5">صافي ربح {{ $sum1 - $sum2 }}</h3>
+                        @elseif($sum2 > $sum1)
+                            <h3 class="mt-5">صافي خسارة {{ $sum1 - $sum2 }}</h3>
+                        @else
+                            <h3 class="mt-5">الجانبان متساويان</h3>
+                        @endif
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        {{-- {{ $entrys->links() }} --}}
+                    </div>
                 </div>
-                <!-- /.card-body -->
-                <div class="card-footer clearfix">
-                    {{-- {{ $entrys->links() }} --}}
-                </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
 @endsection

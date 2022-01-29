@@ -17,7 +17,8 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
@@ -31,6 +32,14 @@
     <!-- summernote -->
     {{-- <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}"> --}}
     @yield('head')
+
+    <style>
+        @media print {
+            .unprint {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body style="font-family: 'Cairo', sans-serif" class="hold-transition sidebar-mini layout-fixed">
@@ -75,11 +84,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                             <div class="d-flex">
-                                <p>{{ auth()->user()->username }}<i class="fa fa-angle-down ml-1" aria-hidden="true"></i></p>
+                                <p>{{ auth()->user()->username }}<i class="fa fa-angle-down ml-1" aria-hidden="true"></i>
+                                </p>
                             </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left text-right" style="right: inherit; right: 0px;">
-                            <a class="nav-link d-flex justify-content-between" href="{{ route('users.show', auth()->user()->username) }}">
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left text-right"
+                            style="right: inherit; right: 0px;">
+                            <a class="nav-link d-flex justify-content-between"
+                                href="{{ route('users.show', auth()->user()->username) }}">
                                 <i class="fas fa-user mr-3"></i>
                                 <span class="float-right text-muted text-sm">حساب {{ auth()->user()->username }}</span>
                             </a>
@@ -90,8 +102,8 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="nav-link d-flex justify-content-between" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt mr-3"></i> 
+                                    document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt mr-3"></i>
                                 <span class="float-right text-muted text-sm">تسحيل خروج</span>
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -240,21 +252,27 @@
                             </a>
                             <ul class="nav nav-treeview" style="display: none;">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('stores') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>عرض </p>
+                                        <p>عرض المخزن</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" data-toggle="modal" data-target="#addGuest">
+                                    <a href="{{ route('store.bill.trashed') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>إضافة </p>
+                                        <p>الفواتير المرحلة</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('store.bill.unsaved') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>الفواتير غير المرحلة</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         @auth
-                            @if (auth()->user()->role == "Manager")
+                            @if (auth()->user()->role == 'Manager')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa fa-cog mr-3" aria-hidden="true"></i>
@@ -312,7 +330,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('journal.balance') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>ميزان المراحعة</p>
+                                        <p>ميزان المراجعة</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -324,12 +342,12 @@
                                 <li class="nav-item">
                                     <a href="{{ route('statement.income') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>قائمة  المركز المالي</p>
+                                        <p>قائمة المركز المالي</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -398,6 +416,7 @@
             });
             return true;
         });
+
     </script>
 </body>
 

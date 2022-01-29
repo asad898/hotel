@@ -21,7 +21,7 @@ class SubAccountController extends Controller
             'price' => '',
         ]);
 
-        // Create Room
+        // Create sub account
         $subAccount = new SubAccount();
         $subAccount->name = $request->input('name');
         $subAccount->main_accounts_id = $request->input('main_accounts_id');
@@ -29,5 +29,22 @@ class SubAccountController extends Controller
         $subAccount->save();
 
         return redirect('/main/accounts/'.$subAccount->main_accounts_id)->with('success', 'تم إضافة حساب جديد');
+    }
+
+    public function update(Request $request, SubAccount $subAccount)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'main_accounts_id' => 'required',
+            'price' => '',
+        ]);
+
+        // update sub account
+        $subAccount->name = $request->input('name');
+        $subAccount->main_accounts_id = $request->input('main_accounts_id');
+        $subAccount->price = $request->input('price');
+        $subAccount->save();
+
+        return redirect('/main/accounts/'.$subAccount->main_accounts_id)->with('success', 'تم تعديل اسم الحساب');
     }
 }

@@ -48,7 +48,7 @@ class MealController extends Controller
             
         ]);
 
-        // New Meal
+        // update Meal
         $meal->name = $request->input('name');
         $meal->price = $request->input('price');
         $meal->save();
