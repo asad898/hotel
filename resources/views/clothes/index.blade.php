@@ -17,6 +17,7 @@
 @endsection
 @section('content')
     @include('clothes.create')
+    @include('clothes.editTax')
     <div class="container-fluid">
         <h1 class="text-center">الملابس</h1>
         <div class="justify-content-between row">
@@ -48,11 +49,39 @@
                 </button>
             </div>
 
+
         </div>
+        @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+            <div class="row mt-3">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="fas fa-balance-scale-left"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text"><b>الضريبة : </b>{{ $tax->tax }} %</span>
+                            <span class="info-box-text"><b>الدمغة : </b>{{ $tax->stamp }} %</span>
+                            <div class="d-flex mt-2">
+                                <span class="info-box-number"></span>
+                                <button type="button" class="btn btn-tool" data-toggle="modal"
+                                    data-target="#editTax{{ $tax->id }}">
+                                    <i class="fas fa-edit text-info fa-lg"></i>
+                                </button>
+                                {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
+                                data-target="#deleteMeal{{ $meal->id }}">
+                                <i class="fas fa-trash text-danger fa-lg"></i>
+                            </button> --}}
+                            </div>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+            </div>
+        @endif
         <div class="row pt-3">
             @if (count($clothes))
                 @foreach ($clothes as $clothe)
-                @include('clothes.edit')
+                    @include('clothes.edit')
                     <div class="col-md-3 col-sm-6 col-12">
                         <div class="info-box">
                             <span class="info-box-icon bg-warning"><i class="fas fa-socks"></i></span>
@@ -61,7 +90,7 @@
                                 <span class="info-box-text">{{ $clothe->name }}</span>
                                 <div class="d-flex">
                                     <span class="info-box-number">{{ $clothe->price }} ج</span>
-                                     <button type="button" class="btn btn-tool" data-toggle="modal"
+                                    <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#editClothe{{ $clothe->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>
                                     </button>

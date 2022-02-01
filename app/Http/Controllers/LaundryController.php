@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\Laundry;
+use App\Models\LaundryTax;
 use Illuminate\Http\Request;
 
 class LaundryController extends Controller

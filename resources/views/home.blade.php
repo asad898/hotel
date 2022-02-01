@@ -47,13 +47,12 @@
         <div class="row pt-5">
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
 
                     <div class="info-box-content">
                         <span class="info-box-text">النزلاء</span>
                         <span class="info-box-number">
-                            10
-                            <small>%</small>
+                            {{ $guests1 }}
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -63,11 +62,11 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">الغرف</span>
-                        <span class="info-box-number">41,410</span>
+                        <span class="info-box-text">الغرف الجاهزة</span>
+                        <span class="info-box-number">{{ $rooms1 }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -83,8 +82,8 @@
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">المطعم</span>
-                        <span class="info-box-number">760</span>
+                        <span class="info-box-text">الطلبات</span>
+                        <span class="info-box-number">{{ $bill }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -93,11 +92,11 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-store"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">المغسلة</span>
-                        <span class="info-box-number">2,000</span>
+                        <span class="info-box-text">اصناف المخزن</span>
+                        <span class="info-box-number">{{ $store }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -105,5 +104,71 @@
             </div>
             <!-- /.col -->
         </div>
+        <div class="row pt-5">
+            @if (count($rooms))
+                @foreach ($rooms as $room)
+                    <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
+                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" />
+                @endforeach
+            @endif
+        </div>
+        <div class="row mt-5 justify-content-center">
+            {{ $rooms->links() }}
+        </div>
+        @if (count($guests2))
+            <div class="row pt-3">
+                @foreach ($guests2 as $guest)
+                    @include('guests.edit')
+                    @include('guests.delete')
+                    <div class="col-md-4">
+                        <!-- Widget: user widget style 2 -->
+                        <div class="card card-widget widget-user-2 shadow">
+                            <!-- Add the bg color to the header using any of the bg-* classes -->
+                            @if ($guest->room)
+                                <div class="widget-user-header bg-success">
+                            @elseif($guest->roomPartner)
+                                <div class="widget-user-header bg-success">
+                            @else
+                                <div class="widget-user-header bg-info">
+                            @endif
+                                <div class="widget-user-image">
+                                    <img class="img-circle elevation-2" src="{{ asset('img/user.png') }}"
+                                        alt="User Avatar">
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <h3 class="widget-user-desc">{{ $guest->id }}</h3>
+                                <h3 class="widget-user-desc">{{ $guest->name }}</h3>
+                                <h4 class="widget-user-username">{{ $guest->institution }}</h4>
+                                <h5 class="widget-user-username">
+                                    {{ $guest->phone }}
+                                </h5>
+                                <div>
+                                    <b>إثبات الشخصية : {{ $guest->identity }}</b>
+                                </div>
+                                <div>
+                                    <b>رقم إثبات الشخصية : {{ $guest->identityId }}</b>
+                                </div>
+                                <p>
+                                    @if ($guest->room) ساكن {{ $guest->room->number }} @elseif($guest->roomPartner) مرافق {{ $guest->roomPartner->number }} @else غير ساكن @endif
+                                </p>
+                                <div class="d-flex mt-4 mb-2">
+                                    {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
+                                        data-target="#deleteGuest{{ $guest->id }}">
+                                        <i class="fas fa-trash text-danger fa-lg"></i>
+                                    </button> --}}
+                                    <button type="button" class="btn btn-tool" data-toggle="modal"
+                                        data-target="#editGuest{{ $guest->id }}">
+                                        <i class="fas fa-edit text-warning fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.widget-user -->
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p>لا يوجد نزلاء حتى الآن</p>
+        @endif
     </div>
 @endsection

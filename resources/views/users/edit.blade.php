@@ -69,7 +69,8 @@
             </div>
             <div class="row align-items-end">
                 <div class="col-md-9">
-                    <textarea name="note" class="form-control" id="aboutMe" rows="5">
+                    <label for="skill">عن المستخدم</label>
+                    <textarea name="note" class="form-control" id="aboutMe">
                         {{ $user->profile->note }}
                     </textarea>
                 </div>

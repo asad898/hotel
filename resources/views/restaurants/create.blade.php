@@ -22,6 +22,10 @@
                                 autofocus required>
                             <input name="bill_id" type="hidden" class="form-control" id="bill_id" placeholder=""
                                 value="{{ $room->bill->id }}" autofocus required>
+                            <input name="tax" type="hidden" class="form-control" id="price" placeholder="" value="0"
+                                autofocus required>
+                            <input name="tourism" type="hidden" class="form-control" id="bill_id" placeholder=""
+                                value="0" autofocus required>
                         </div>
                     </div>
 

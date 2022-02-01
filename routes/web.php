@@ -95,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/meals', [MealController::class, 'store'])->name('meal.store');
     Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meal.update');
     Route::delete('/meals/{meal}', [MealController::class, 'delete'])->name('meal.delete');
+
+    // Meal Tax
+    Route::put('/tax/{id}', [MealController::class, 'taxUpdate'])->name('tax.update');
     
     // Bills
     Route::get('/restaurants', [RestBillController::class, 'index'])->name('restaurants');
@@ -138,6 +141,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/clothes/{clothe}', [ClotheController::class, 'update'])->name('clothe.update');
     Route::delete('/clothes/{clothe}', [ClotheController::class, 'destroy'])->name('clothe.delete');
 
+    // Laundry Tax
+    Route::put('/tax/clothe/{id}', [ClotheController::class, 'taxUpdate'])->name('tax.clothe.update');
+
     // Bills
     Route::get('/laundries', [LaundryController::class, 'index'])->name('laundries');
     Route::get('/laundries/trashed', [LaundryController::class, 'trashed'])->name('laundries.trashed');
@@ -146,11 +152,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/laundries/store', [BillDetaController::class, 'laundryBill'])->name('laundries.store');
 
     # User Profile Routes
-    Route::get('/users', [UserProfileController::class, 'index'])->name('users');
+    Route::get('/users', [UserProfileController::class, 'index'])->name('users')->middleware('Admin');
     Route::get('/users/{user:username}', [UserProfileController::class, 'show'])->name('users.show');
     Route::get('/users/edit/{user:username}', [UserProfileController::class, 'edit'])->name('users.edit');
-    Route::put('/users/edit/{user:username}', [UserProfileController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user:username}', [UserProfileController::class, 'destroy'])->name('users.destroy');
+    Route::put('/users/edit/{user:username}', [UserProfileController::class, 'update'])->name('users.update')->middleware('auth');
+    Route::delete('/users/{user:username}', [UserProfileController::class, 'destroy'])->name('users.destroy')->middleware('Admin');
 
     # Change Passowrd Routes
     Route::get('change-password', [ChangePasswordController::class, 'index']);

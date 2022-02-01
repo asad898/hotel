@@ -28,7 +28,7 @@
     @endif
     <div class="card-header">
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
             </button>
             <b>{{ $room->number }}</b>
         </div>
@@ -53,7 +53,7 @@
         <!-- /.card-tools -->
     </div>
     <!-- /.card-header -->
-    <div class="card-body text-dark" style="display: none;">
+    <div class="card-body text-dark" style="display: block;">
         <div class="card-tools">
             {{-- <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#deleteRoom{{ $room->id }}">
                 <i class="fas fa-trash"></i>
@@ -88,11 +88,13 @@
                 ساكنة @endif
         </p>
         <p>التصنيف :@if ($room->roomprice_id) {{ $room->roomprice->desc }} -
-            {{ $room->roomprice->price }} @else غير ساكنة @endif
+            {{ $room->roomprice->rent }} @else غير ساكنة @endif
         </p>
         <p>الفاتورة :@if ($room->bill) {{ $room->bill->price }} @else غير ساكنة @endif
         </p>
-        <p>مدخل البيانات :@if ($room->user_id) {{ $room->user->username }} @else غير ساكنة @endif
+        @if(auth()->user()->role == 'Admin')
+            <p>مدخل البيانات :@if ($room->user_id) {{ $room->user->username }} @else غير ساكنة @endif
+        @endif
         </p>
         @if ($room->status != 'تحت التنظيف' && $room->status != 'خارج الخدمة')
             <div class="text-center">

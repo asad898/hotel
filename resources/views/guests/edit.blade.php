@@ -13,21 +13,56 @@
             @method('PUT')
             <div class="modal-body">
                 <div class="form-group row mx-0">
-
                     <div class="form-group col-md-6">
                         <label for="name" class="font-weight-light">إسم النزيل</label>
-                        {{Form::text('name', $guest->name,['class' => 'form-control'])}}
+                        <input id="name" type="text" value="{{ $guest->name }}" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
+                        @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label for="phone" class="font-weight-light">الهاتف</label>
-                        {{Form::text('phone', $guest->phone, ['class' => 'form-control'])}}
+                        <input id="phone" type="text" value="{{ $guest->phone }}" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autofocus>
+                        @error('phone')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="form-group row mx-0">
                     <div class="form-group col-md-12">
                         <label for="institution" class="font-weight-light">العنوان</label>
-                        {{Form::text('institution', $guest->institution,['class' => 'form-control'])}}
+                        <input id="institution" type="text" value="{{ $guest->institution }}" class="form-control @error('institution') is-invalid @enderror" name="institution" value="{{ old('institution') }}" required autofocus>
+                        @error('institution')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-group row mx-0">
+                    <div class="form-group col-md-6">
+                        <label for="identity" class="font-weight-light">نوع إثبات الهوية</label>
+                        <input id="identity" type="text" value="{{ $guest->identity }}" class="form-control @error('identity') is-invalid @enderror" name="identity" value="{{ old('identity') }}" required autofocus>
+                        @error('identity')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="identityId" class="font-weight-light">رقم إثبات الهوية</label>
+                        <input id="identityId" type="text" value="{{ $guest->identityId }}" class="form-control @error('identityId') is-invalid @enderror" name="identityId" value="{{ old('identityId') }}" required autofocus>
+                        @error('identityId')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </div>
 

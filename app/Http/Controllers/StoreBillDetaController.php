@@ -16,6 +16,8 @@ class StoreBillDetaController extends Controller
             'store_id' => 'required',
             'user_id' => '',
             'bill_id' => '',
+            'price' => '',
+            'one_p' => '',
         ]);
 
         
@@ -30,13 +32,16 @@ class StoreBillDetaController extends Controller
                 return redirect('/store/show/unsaved/'.$request->input('bill_id'))->with('error', 'لا توجد سلعة بهذا الرقم');
             }
         }
+        $storem = Store::find($store->store_id);
         $store->user_id = Auth::user()->id;
+        $store->price = $request->input('quantity') * $storem->price;
+        $store->one_p = $storem->price;
         $store->save();
 
-        $storem = Store::find($store->store_id);
+        // لحذف الكمية من المخزن
         $storem->quantity = $storem->quantity - $store->quantity;
         $storem->save();
         
-        return redirect('/store/'.$store->bill_id)->with('success', 'تم حفظ عنصر جديد');
+        return redirect('/store/show/unsaved/'.$store->bill_id)->with('success', 'تم حفظ عنصر جديد');
     }
 }

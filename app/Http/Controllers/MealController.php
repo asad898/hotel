@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meal;
+use App\Models\RestTax;
 use Illuminate\Http\Request;
 
 class MealController extends Controller
 {
     public function index(Request $request)
     {
+        $tax = RestTax::find(1);
         $meals = Meal::where([
             ['name', '!=', Null],
             [function ($query) use ($request){
@@ -19,7 +21,7 @@ class MealController extends Controller
         ])
         ->orderBy("id", "asc")
         ->get();
-        return view('meals.index', compact('meals'))
+        return view('meals.index', compact(['meals', 'tax']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 
@@ -54,5 +56,21 @@ class MealController extends Controller
         $meal->save();
         
         return redirect('/meals')->with('success', 'تم تحديث بيانات الوجبة');
+    }
+
+    public function taxUpdate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'tax' => 'required',
+            'tourism' => 'required',
+            
+        ]);
+        $tax = RestTax::find($id);
+        // update tax
+        $tax->tax = $request->input('tax');
+        $tax->tourism = $request->input('tourism');
+        $tax->save();
+        
+        return redirect('/meals')->with('success', 'تم تحديث الضريبة');
     }
 }

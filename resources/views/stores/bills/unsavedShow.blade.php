@@ -50,10 +50,10 @@
                                         <tr>
                                             <td>{{ $deta->store->name }}</td>
                                             <td>{{ $deta->quantity }}</td>
-                                            <td>{{ $deta->store->price }}</td>
-                                            <td>{{ $deta->store->price * $deta->quantity }}</td>
+                                            <td>{{ $deta->one_p }}</td>
+                                            <td>{{ $deta->price }}</td>
                                         </tr>
-                                    <p style="display: none;">{{ $sum += $deta->store->price * $deta->quantity }}</p>
+                                    <p style="display: none;">{{ $sum += $deta->price }}</p>
                                 @endforeach
                             @endif
                         </tbody>
@@ -64,7 +64,7 @@
                             <td><b>{{ $sum }}</b></td>
                         </tr>
                     </table>
-                    <small><b>مدخل البيانات : </b>{{ $storeBill->user->username }}</small>
+                    <small><b>مدخل الفاتوره : </b>{{ $storeBill->user->username }}</small>
                     <tr class="table-danger">
                         <button type="button" class="btn btn-primary w-100 rounded-0 unprint" data-toggle="modal"
                             data-target="#addDeta">

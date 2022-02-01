@@ -42,29 +42,40 @@
                                 <tbody class="text-right">
                                     @if (count($users))
                                         @foreach ($users as $user)
-                                            <tr class="odd">
-                                                <td>{{ $user->created_at }}</td>
-                                                <td class="dtr-control sorting_1" tabindex="0">
-                                                    {{ $user->id }}
-                                                </td>
-                                                <td>{{ $user->username }}</td>
-                                                <td>{{ $user->role }}</td>
-                                                <td>
-                                                    {{ $user->tel }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('users.show', $user->username) }}" class="btn btn-tool">
-                                                        <i class="fa fa-address-card fa-lg text-primary" aria-hidden="true"></i>
-                                                    </a>
-                                                    @if (auth()->user()->role == "Manager")
-                                                        @include('users.delete')
-                                                        <button type="button" class="btn btn-tool" data-toggle="modal"
-                                                            data-target="#deleteUser{{ $user->id }}">
-                                                            <i class="fas fa-trash text-danger fa-lg"></i>
-                                                        </button>
-                                                    @endif
-                                                </td>
-                                            </tr>
+                                            @if ($user->role != 'Admin')
+                                                <tr class="odd">
+                                                    <td>{{ $user->created_at }}</td>
+                                                    <td class="dtr-control sorting_1" tabindex="0">
+                                                        {{ $user->id }}
+                                                    </td>
+                                                    <td>{{ $user->username }}</td>
+                                                    <td>
+                                                        @if($user->role == "AManager")
+                                                            مدير
+                                                        @endif
+                                                        @if($user->role == "reception")
+                                                            موظف
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ $user->tel }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a href="{{ route('users.show', $user->username) }}"
+                                                            class="btn btn-tool">
+                                                            <i class="fa fa-address-card fa-lg text-primary"
+                                                                aria-hidden="true"></i>
+                                                        </a>
+                                                        @if (auth()->user()->role == 'Admin')
+                                                            @include('users.delete')
+                                                            <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                                data-target="#deleteUser{{ $user->id }}">
+                                                                <i class="fas fa-trash text-danger fa-lg"></i>
+                                                            </button>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     @else
                                         <p>لا يوجد مستخدمين حالياً</p>

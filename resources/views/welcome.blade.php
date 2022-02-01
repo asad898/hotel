@@ -47,7 +47,7 @@
         <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
             <div class="d-flex justify-content-center">
                 <div class="text-center">
-                    <h1 class="mx-auto my-0 text-uppercase">Fisal Hotel</h1>
+                    <h1 class="mx-auto my-0 text-uppercase">Al-Faisal</h1>
                 </div>
             </div>
         </div>

@@ -30,7 +30,9 @@ class RoomPriceController extends Controller
         $roomsprices->tax = $request->input('tax');
         $roomsprices->tourism = $request->input('tourism');
         $roomsprices->rent = $request->input('rent');
-        $roomsprices->price = $request->input('tax') + $request->input('tourism') + $request->input('rent');
+        $tax = $request->input('tax') /100 * $request->input('rent');
+        dd($tax);
+        $roomsprices->price =  $request->input('rent');
         $roomsprices->save();
         
         return redirect('/roomsprices')->with('success', 'تم تسجيل تصنيف جديد');
@@ -52,7 +54,9 @@ class RoomPriceController extends Controller
         $roomprice->tax = $request->input('tax');
         $roomprice->tourism = $request->input('tourism');
         $roomprice->rent = $request->input('rent');
-        $roomprice->price = $request->input('tax') + $request->input('tourism') + $request->input('rent');
+        $tax = ($request->input('tax') /100) * $request->input('rent');
+        $tourism = ($request->input('tourism') /100) * $request->input('rent');
+        $roomprice->price = $request->input('rent') - $tax - $tourism;
         $roomprice->save();
         
         return redirect('/roomsprices')->with('success', 'تم تسجيل تصنيف جديد');

@@ -133,7 +133,7 @@ class RoomController extends Controller
                 $bill->room_id = $room->id;
                 $bill->statment = "إيجار غرفة";
                 $bill->partner_id = $request->input('partner_id');
-                $bill->price = $room->roomprice->price;
+                $bill->price = $room->roomprice->rent;
                 $bill->user_id = Auth::user()->id;
                 $bill->institution_id = $request->input('institution_id');
                 $bill->save();
@@ -145,6 +145,8 @@ class RoomController extends Controller
                 $detail->room_id = $request->input('room_id');
                 $detail->statment = $request->input('statment');
                 $detail->price = $room->roomprice->price;
+                $detail->tax = $room->roomprice->tax / 100 * $room->roomprice->rent;
+                $detail->tourism = $room->roomprice->tourism / 100 * $room->roomprice->rent;
                 $detail->bill_id = $bill->id;
                 $detail->save();
 

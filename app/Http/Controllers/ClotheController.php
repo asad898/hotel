@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clothe;
+use App\Models\LaundryTax;
 use Illuminate\Http\Request;
 
 class ClotheController extends Controller
 {
     public function index(Request $request)
     {
+        $tax = LaundryTax::find(1);
         $clothes = Clothe::where([
             ['name', '!=', Null],
             [function ($query) use ($request){
@@ -19,7 +21,7 @@ class ClotheController extends Controller
         ])
         ->orderBy("id", "asc")
         ->get();
-        return view('clothes.index', compact('clothes'))
+        return view('clothes.index', compact(['clothes', 'tax']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 
@@ -54,5 +56,21 @@ class ClotheController extends Controller
         $clothe->save();
         
         return redirect('/clothes')->with('success', 'تم تحديث بيانات الملبوسات');
+    }
+
+    public function taxUpdate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'tax' => 'required',
+            'tourism' => 'required',
+            
+        ]);
+        $tax = LaundryTax::find($id);
+        // update tax
+        $tax->tax = $request->input('tax');
+        $tax->stamp = $request->input('tourism');
+        $tax->save();
+        
+        return redirect('/meals')->with('success', 'تم تحديث الضريبة');
     }
 }

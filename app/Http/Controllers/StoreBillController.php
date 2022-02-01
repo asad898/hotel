@@ -22,18 +22,7 @@ class StoreBillController extends Controller
         $store->user_id = Auth::user()->id;
         $store->save();
         
-        return redirect('/store/'.$store->id)->with('success', 'تم إنشاء فاتورة جديد قم بإضافة السلع');
-    }
-
-    public function show(StoreBill $storeBill)
-    {
-        $sum = 0;
-        $items = Store::orderBy('created_at', 'asc')->get();
-        return view('stores.bills.show')
-        ->with('storeBill', $storeBill)
-        ->with('storeBill1', $storeBill->storeDetas)
-        ->with('items', $items)
-        ->with('sum', $sum);
+        return redirect('/store/show/unsaved/'.$store->id)->with('success', 'تم إنشاء فاتورة جديد قم بإضافة السلع');
     }
 
     public function destroy(StoreBill $storeBill)

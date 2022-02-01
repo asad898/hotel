@@ -20,7 +20,6 @@
                         </div>
                     </div>
                     <div class="form-group row mx-0">
-                        {{Form::hidden('quantity', $store->quantity,['class' => 'form-control'])}}
                         <div class="form-group col-md-6">
                             <label for="measure" class="font-weight-light">وحدة القياس</label>
                             {{Form::text('measure', $store->measure,['class' => 'form-control'])}}
@@ -30,7 +29,14 @@
                             {{Form::text('price', $store->price, ['class' => 'form-control'])}}
                         </div>
                     </div>
-
+                    @if(auth()->user()->role == 'Admin')
+                        <div class="form-group row mx-0">
+                            <div class="form-group col-md-12">
+                                <label for="name" class="font-weight-light">الكمية</label>
+                                {{Form::text('quantity', $store->quantity,['class' => 'form-control'])}}
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="row m-0">
                     {{Form::Submit('حفظ', ['class' => 'btn btn-info col-md-6 rounded-0 py-2'])}}

@@ -17,6 +17,7 @@ class GuestController extends Controller
                     $query->orWhere('name', 'LIKE', '%' . $term . '%')->get();
                     $query->orWhere('institution', 'LIKE', '%' . $term . '%')->get();
                     $query->orWhere('phone', 'LIKE', '%' . $term . '%')->get();
+                    $query->orWhere('identityId', 'LIKE', '%' . $term . '%')->get();
                 }
             }]
         ])
@@ -37,6 +38,8 @@ class GuestController extends Controller
             'phone' => ['required', 'unique:guests'],
             'institution' => 'required',
             'user_id' => '',
+            'identity' => 'required',
+            'identityId' => ['required', 'unique:guests'],
             
         ]);
 
@@ -45,6 +48,8 @@ class GuestController extends Controller
         $guest->name = $request->input('name');
         $guest->phone = $request->input('phone');
         $guest->institution = $request->input('institution');
+        $guest->identity = $request->input('identity');
+        $guest->identityId = $request->input('identityId');
         $guest->user_id = Auth::user()->id;
         $guest->save();
         
@@ -58,12 +63,16 @@ class GuestController extends Controller
             'phone' => 'required',
             'institution' => 'required',
             'user_id' => '',
+            'identity' => 'required',
+            'identityId' => 'required',
         ]);
 
         // Update guest
         $guest->name = $request->input('name');
         $guest->phone = $request->input('phone');
         $guest->institution = $request->input('institution');
+        $guest->identity = $request->input('identity');
+        $guest->identityId = $request->input('identityId');
         $guest->user_id = Auth::user()->id;
         $guest->save();
         

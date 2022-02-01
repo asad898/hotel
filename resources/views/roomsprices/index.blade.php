@@ -28,7 +28,7 @@
                 @foreach ($roomsprices as $roomprice)
                     @include('roomsprices.edit')
                     @include('roomsprices.delete')
-                    <div class="col-md-3 col-sm-6 col-12">
+                    <div class="col-md-4 col-sm-6 col-12">
                         <div class="info-box bg-gradient-warning">
                             {{-- <span class="info-box-icon"><i class="far fa-dollar"></i></span> --}}
 
@@ -41,11 +41,11 @@
                                     </div>
                                     <div class="px-2 text-center">
                                         <span class="info-box-text">ضريبة</span>
-                                        <span class="info-box-number">{{ $roomprice->tax }}</span>
+                                        <span class="info-box-number">{{ $roomprice->tax }}%</span>
                                     </div>
                                     <div class="px-2 text-center">
                                         <span class="info-box-text">سياحة</span>
-                                        <span class="info-box-number">{{ $roomprice->tourism }}</span>
+                                        <span class="info-box-number">{{ $roomprice->tourism }}%</span>
                                     </div>
                                 </div>
 
@@ -53,13 +53,13 @@
                                     <div class="progress-bar" style="width: 100%"></div>
                                 </div>
                                 <span class="progress-description">
-                                    سعر اليوم <b>${{ $roomprice->price }}</b>
+                                    غير شامل الضريبة <b>${{ $roomprice->price }}</b>
                                 </span>
                                 <div class="card-tools pt-2">
-                                    <button type="button" class="btn btn-tool" data-toggle="modal"
+                                    {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteRoomPrice{{ $roomprice->id }}">
                                         <i class="fas fa-lg fa-trash text-danger"></i>
-                                    </button>
+                                    </button> --}}
                                     <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#editRoomPrice{{ $roomprice->id }}">
                                         <i class="fas fa-lg fa-edit text-info"></i>

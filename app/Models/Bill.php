@@ -33,4 +33,9 @@ class Bill extends Model
     public function laundry(){
         return $this->hasMany(Laundry::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

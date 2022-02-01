@@ -45,10 +45,10 @@
                                     <tr>
                                         <td>{{ $deta->store->name }}</td>
                                         <td>{{ $deta->quantity }}</td>
-                                        <td>{{ $deta->store->price }}</td>
-                                        <td>{{ $deta->store->price * $deta->quantity }}</td>
+                                        <td>{{ $deta->one_p }}</td>
+                                        <td>{{ $deta->price }} ج</td>
                                     </tr>
-                                    <p style="display: none;">{{ $sum += $deta->store->price * $deta->quantity }}</p>
+                                    <p style="display: none;">{{ $sum += $deta->price }}</p>
                                 @endforeach
                             @endif
                         </tbody>
@@ -56,10 +56,10 @@
                             <td><b>المجموع</b></td>
                             <td></td>
                             <td></td>
-                            <td><b>{{ $sum }}</b></td>
+                            <td><b>{{ $sum }} ج</b></td>
                         </tr>
                     </table>
-                    <small><b>مدخل البيانات : </b>{{ $storeBill->user->username }}</small>
+                    <small><b>مدخل الفاتوره : </b>{{ $storeBill->user->username }}</small>
                 </div>
             </div>
         </div>

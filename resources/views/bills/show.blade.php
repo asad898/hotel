@@ -1,125 +1,79 @@
 @extends('layouts.app')
 @section('head')
-    <title>
-        فاتورة {{ $bill->guest->name }} @if ($bill->partner)
-                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }} - {{ $bill->institution->name }}
-    </title>
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>فاتورة نزيل</title>
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 @endsection
 @section('content')
-    @include('bills.delete')
     <div class="container-fluid">
-        <h4 class="text-center mb-2">
-            فاتورة {{ $bill->guest->name }} @if ($bill->partner)
-                +{{ $bill->partner->name }} @endif بالرقم {{ $bill->id }}
-        </h4>
-        <h5 class="text-center mb-2">{{ $bill->institution->name }}</h5>
-        {{-- <div class="d-flex my-3">
-            <button type="button" class="btn btn-tool text-danger" data-toggle="modal"
-                data-target="#deleteBill{{ $bill->id }}">
-                <i class="fas fa-trash"></i>
+        <h5 class="text-center mt-3">
+            فندق الفيصل
+        </h5>
+        <div class="d-flex mt-5 align-items-end">
+            <p class="mx-3"><b>اسم النزيل : </b> {{ $bill->guest->name }}</p>
+            @if ($bill->partner)<p class="mx-3"><b>المرافق : </b> {{ $bill->partner->name }}</p>@endif
+            <p class="mx-3"><b>الحالة : </b> @if(!$bill->deleted_at) ساكن @else مغادر @endif</p>
+        </div>
+        <div class="d-flex align-items-end">
+            <p class="mx-3"><b>تاريخ الوصول: </b> {{ $bill->created_at->format('d/m/Y') }}</p>
+            <p class="mx-3"><b>رقم الفاتوره : </b> {{ $bill->id }}</p>
+            <p class="mx-3"><b>الجهة : </b>{{ $bill->institution->name }} </p>
+            <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
+                <i class="fa fa-print" aria-hidden="true"></i> طباعة
             </button>
-        </div> --}}
-        <div class="row">
-            <div class="card-body">
-                <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-
-                    <div class="row text-left" dir="ltr">
-                        <div class="col-sm-12">
-                            <table id="example1" dir="rtl" class="table table-bordered table-striped dataTable dtr-inline" role="grid"
-                                aria-describedby="example1_info">
-                                <thead>
-                                    <tr role="row">
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="Engine version: activate to sort column ascending">التاريخ</th>
-                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
-                                            colspan="1" aria-sort="ascending"
-                                            aria-label="Rendering engine: activate to sort column descending">رقم العملية
-                                        </th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="Platform(s): activate to sort column ascending">البيان</th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                        aria-label="CSS grade: activate to sort column ascending">رقم الغرفة</th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Browser: activate to sort column ascending">المبلغ</th>
+        </div>
+        <div class="row justify-content-center mb-5 mx-2">
+            <div class="card col-md-12">
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table class="table">
+                        
+                        <thead>
+                            <tr role="row">
+                                <th>التاريخ</th>
+                                <th>رقم العملية</th>
+                                <th>البيان</th>
+                                <th>رقم الغرفة</th>
+                                <th>المبلغ</th>
+                                <th>الضريبة</th>
+                                <th>دمغة / سياحة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (count($details))
+                                @foreach ($details as $detail)
+                                    <tr class="odd">
+                                        <td>{{ $detail->created_at->format('d/m/Y') }}</td>
+                                        <td class="dtr-control sorting_1" tabindex="0">{{ $detail->id }}</td>
+                                        <td>{{ $detail->statment }}</td>
+                                        <td>{{ $detail->room->number }}</td>
+                                        <td>{{ $detail->price }}</td>
+                                        <td>{{ $detail->tax }}</td>
+                                        <td>{{ $detail->tourism }}</td>
                                     </tr>
-                                </thead>
-                                <tbody class="text-right">
-                                    @if (count($details))
-                                        @foreach ($details as $detail)
-                                            <tr class="odd">
-                                                <td>{{ $detail->created_at }}</td>
-                                                <td class="dtr-control sorting_1" tabindex="0">{{ $detail->id }}</td>
-                                                <td>{{ $detail->statment }}</td>
-                                                <td>{{ $detail->room->number }}</td>
-                                                <td>{{ $detail->price }}</td>
-                                            </tr>
-                                        @endforeach
-                                        <tr class="text-right">
-                                            <td class="text-center">المجموع</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ $bill->price }}</td>
-                                        </tr>
-                                        @else
-                                        <p>لا توجد فواتير حتى الآن</p>
-                                        @endif
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
-                                        <th class="text-right" rowspan="1" colspan="1">رقم العملية</th>
-                                        <th class="text-right" rowspan="1" colspan="1">البيان</th>
-                                        <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>
-                                        <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                                @endforeach
+                            @else
+                                <p>لا توجد فواتير حتى الآن</p>
+                            @endif
+                        </tbody>
+                    </table>
+                    <div class="d-flex mt-5 align-items-end">
+                        <p class="mx-3"><b>المطالبة : </b> {{ $bill->price }} ج</p>
                     </div>
-
+                    <small><b>مدخل الفاتوره : </b>{{ $bill->user->username }}</small>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
-@endpush

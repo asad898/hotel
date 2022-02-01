@@ -22,7 +22,7 @@
         <h1 class="text-center">عرض النزلاء</h1>
         <!-- Button trigger modal -->
         <div class="justify-content-between row">
-            
+
             <div class="col-md-6 mt-3">
                 <form action="{{ route('guests') }}" method="GET" role="search">
                     <div class="input-group">
@@ -62,47 +62,65 @@
                             <!-- Add the bg color to the header using any of the bg-* classes -->
                             @if ($guest->room)
                                 <div class="widget-user-header bg-success">
-                            @elseif($guest->roomPartner)
-                                <div class="widget-user-header bg-success">
-                            @else
-                                <div class="widget-user-header bg-info">
+                                @elseif($guest->roomPartner)
+                                    <div class="widget-user-header bg-success">
+                                    @else
+                                        <div class="widget-user-header bg-info">
                             @endif
-                                <div class="widget-user-image">
-                                    <img class="img-circle elevation-2" src="{{ asset('img/user.png') }}"
-                                        alt="User Avatar">
-                                </div>
-                                <!-- /.widget-user-image -->
-                                <h3 class="widget-user-desc">{{ $guest->id }}</h3>
-                                <h3 class="widget-user-desc">{{ $guest->name }}</h3>
-                                <h4 class="widget-user-username">{{ $guest->institution }}</h4>
-                                <h5 class="widget-user-username">
-                                    {{ $guest->phone }}
-                                </h5>
-                                <p>
-                                    @if ($guest->room) ساكن {{ $guest->room->number }} @elseif($guest->roomPartner) مرافق {{ $guest->roomPartner->number }} @else غير ساكن @endif
-                                </p>
-                                <div class="d-flex mt-4 mb-2">
-                                    {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
+                            <div class="widget-user-image">
+                                <img class="img-circle elevation-2" src="{{ asset('img/user.png') }}" alt="User Avatar">
+                            </div>
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-desc">{{ $guest->id }}</h3>
+                            <h3 class="widget-user-desc">
+                                {{ $guest->name }}
+                            </h3>
+                            <div class="mt-2">
+                                <b>العنوان :</b>{{ $guest->institution }}
+                            </div>
+                            <div class="mt-2">
+                                <b>الهاتف :</b>{{ $guest->phone }}
+                            </div>
+                            <div class="mt-2">
+                                <b>إثبات الشخصية :</b> {{ $guest->identity }}
+                            </div>
+                            <div class="mt-2">
+                                <b>رقم إثبات الشخصية :</b> {{ $guest->identityId }}
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+                                    <div>
+                                       <b>مدخل البيانات</b> : {{ $guest->user->username }}
+                                    </div>
+                                @endif
+                                <div>
+                                    @if ($guest->room)<b>الحالة</b> : ساكن {{ $guest->room->number }}
+                                @elseif($guest->roomPartner)<b>الحالة</b> : مرافق {{ $guest->roomPartner->number }} @else<b>الحالة</b> : غير
+                                    ساكن @endif
+                            </div>
+                        </div>
+                        <div class="d-flex mt-4 mb-2">
+                            {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteGuest{{ $guest->id }}">
                                         <i class="fas fa-trash text-danger fa-lg"></i>
                                     </button> --}}
-                                    <button type="button" class="btn btn-tool" data-toggle="modal"
-                                        data-target="#editGuest{{ $guest->id }}">
-                                        <i class="fas fa-edit text-warning fa-lg"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <button type="button" class="btn btn-tool" data-toggle="modal"
+                                data-target="#editGuest{{ $guest->id }}">
+                                <i class="fas fa-edit text-warning fa-lg"></i>
+                            </button>
                         </div>
-                        <!-- /.widget-user -->
                     </div>
-                @endforeach
-            </div>
-            <div class="row mt-4 justify-content-center">
-                {{ $guests->links() }}
-            </div>
-        @else
-            <p>لا يوجد نزلاء حتى الآن</p>
-        @endif
+                </div>
+                <!-- /.widget-user -->
+        </div>
+    @endforeach
+</div>
+<div class="row mt-4 justify-content-center">
+    {{ $guests->links() }}
+</div>
+@else
+<p>لا يوجد نزلاء حتى الآن</p>
+@endif
 
-    </div>
+</div>
 @endsection

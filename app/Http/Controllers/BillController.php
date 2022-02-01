@@ -20,7 +20,7 @@ class BillController extends Controller
             }]
         ])
             ->with(['room','guest','partner', 'details'])
-            ->orderBy("id", "asc")
+            ->orderBy("created_at", "desc")
             ->get();
         return view('bills.index', compact(['bills']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
