@@ -12,6 +12,7 @@ use App\Http\Controllers\LaundryController;
 use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\MainAccountController;
 use App\Http\Controllers\MealController;
+use App\Http\Controllers\ReBillControler;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestBillController;
 use App\Http\Controllers\RoomPriceController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\StoreBillDetaController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SubAccountController;
 use App\Http\Controllers\UserProfileController;
+use App\Models\StoreBill;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,12 @@ Route::middleware(['auth'])->group(function () {
     
     //change Room Price
     Route::put('/rooms/price/{room}', [RoomController::class, 'changePrice'])->name('room.price');
+
+    // Add partenr
+    Route::put('/add/partner/{room}', [RoomController::class, 'addPartner'])->name('room.add.partner');
+
+    // Remove partenr
+    Route::put('/remove/partner/{room}', [RoomController::class, 'removePartner'])->name('room.remove.partner');
     
     // Room pricing Routes
     Route::get('/roomsprices', [RoomPriceController::class, 'index'])->name('roomsprices');
@@ -87,15 +95,18 @@ Route::middleware(['auth'])->group(function () {
     //Bill Details Routes
     Route::get('/bills/details', [BillDetaController::class, 'index'])->name('details');
     Route::post('/bills/details', [BillDetaController::class, 'store'])->name('detail.store');
+    Route::post('/bills/payment', [RoomController::class, 'payment'])->name('detail.payment');
+    Route::delete('/bills/delete/{id}', [BillDetaController::class, 'destroy'])->name('bill.deta.delete');
     
     # Restaurant Routes
+
     
     // Meals
     Route::get('/meals', [MealController::class, 'index'])->name('meals');
     Route::post('/meals', [MealController::class, 'store'])->name('meal.store');
     Route::put('/meals/{meal}', [MealController::class, 'update'])->name('meal.update');
     Route::delete('/meals/{meal}', [MealController::class, 'delete'])->name('meal.delete');
-
+    
     // Meal Tax
     Route::put('/tax/{id}', [MealController::class, 'taxUpdate'])->name('tax.update');
     
@@ -105,6 +116,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/restaurants/{id}', [RestBillController::class, 'show'])->name('restaurants.show');
     Route::get('/restaurants/trashed/{id}', [RestBillController::class, 'showTrashed'])->name('restaurants.show.trashed');
     Route::post('/bills/restBillStore', [BillDetaController::class, 'restBillStore'])->name('detail.restBillStore');
+    
+    // New bill style
+    Route::post('/rebill', [ReBillControler::class, 'store'])->name('rebill.store');
+    Route::get('/rebill/{id}', [ReBillControler::class, 'show'])->name('rebill.show');
+    Route::post('/billde', [ReBillControler::class, 'storedeta'])->name('billde.store');
+
 
     # Store Routes
 
@@ -114,6 +131,8 @@ Route::middleware(['auth'])->group(function () {
     
     // Store pay bills
     Route::put('/stores/pay/{store}', [StoreController::class, 'payItem'])->name('store.payItem');
+    Route::post('/bills/move1/{storeBill}', [StoreBillController::class, 'destroy1'])->name('detail.move1');
+    Route::delete('/store/deta/{storeDeta}', [StoreBillDetaController::class, 'destroy'])->name('store.deta.delete');
 
     // Store sell Bills
     Route::get('/sell', [StoreController::class, 'sell'])->name('sell.create');
@@ -129,7 +148,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/store/show/unsaved/{id}', [StoreBillController::class, 'unsavedShow'])->name('store.bill.unsaved.show');
     // حذف الفواتير غير المرحلة
     Route::delete('/store/delete/{storeBill}', [StoreBillController::class, 'unsavedDelete'])->name('store.unsaved.delete');
-
+    // الموافقة على الفواتير من الادارة
+    Route::put('/admin/conf{storeBill}', [StoreBillController::class, 'adminConf'])->name('admin.conf.store');
+    // عرض الفواتير قبل الموافقة
+    Route::get('/admin/index/store', [StoreBillController::class, 'adminindex'])->name('admin.index.store');
+    Route::get('/am/index/store', [StoreBillController::class, 'am'])->name('am.index.store');
     // Store Bill details
     Route::post('/store/detail', [StoreBillDetaController::class, 'store'])->name('deta.bill.store');
 
@@ -151,17 +174,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laundries/trashed/{id}', [LaundryController::class, 'showTrashed'])->name('laundries.show.trashed');
     Route::post('/laundries/store', [BillDetaController::class, 'laundryBill'])->name('laundries.store');
 
-    # User Profile Routes
-    Route::get('/users', [UserProfileController::class, 'index'])->name('users')->middleware('Admin');
+    # Users
+    
+    // Users Profiles Routes
+    Route::get('/users', [UserProfileController::class, 'index'])->name('users');
     Route::get('/users/{user:username}', [UserProfileController::class, 'show'])->name('users.show');
     Route::get('/users/edit/{user:username}', [UserProfileController::class, 'edit'])->name('users.edit');
     Route::put('/users/edit/{user:username}', [UserProfileController::class, 'update'])->name('users.update')->middleware('auth');
-    Route::delete('/users/{user:username}', [UserProfileController::class, 'destroy'])->name('users.destroy')->middleware('Admin');
+    Route::delete('/users/{user:username}', [UserProfileController::class, 'destroy'])->name('users.destroy');
 
     # Change Passowrd Routes
     Route::get('change-password', [ChangePasswordController::class, 'index']);
     Route::post('change-password', [ChangePasswordController::class, 'store'])->name('change.password');
 
+    // User Roles
+    Route::put('/users/roles/edit/{user:username}', [UserProfileController::class, 'roles'])->name('users.update.roles')->middleware('auth');
 
     // Accounting Route
 
@@ -188,5 +215,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/income', [LedgerController::class, 'income'])->name('journal.income');
     # قائمة المركز المالي
     Route::get('/income/statement', [LedgerController::class, 'incomeStatement'])->name('statement.income');
+    
 
 });

@@ -42,13 +42,14 @@
                     </div>
                 </form>
             </div>
-
-            <div class="col-md-6 d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createGuest">
-                    <i class="fas fa-plus"></i>
-                    إضافة نزيل جديد
-                </button>
-            </div>
+            @if (auth()->user()->ree)
+                <div class="col-md-6 d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createGuest">
+                        <i class="fas fa-plus"></i>
+                        إضافة نزيل جديد
+                    </button>
+                </div>
+            @endif
 
         </div>
         @if (count($guests))
@@ -67,14 +68,14 @@
                                     @else
                                         <div class="widget-user-header bg-info">
                             @endif
-                            <div class="widget-user-image">
-                                <img class="img-circle elevation-2" src="{{ asset('img/user.png') }}" alt="User Avatar">
-                            </div>
+                            <!--<div class="widget-user-image">-->
+                            <!--    <img class="img-circle elevation-2" src="{{ asset('img/user.png') }}" alt="User Avatar">-->
+                            <!--</div>-->
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-desc">{{ $guest->id }}</h3>
-                            <h3 class="widget-user-desc">
+                            <h5 class="widget-user-desc font-weight-bold">
                                 {{ $guest->name }}
-                            </h3>
+                            </h5>
                             <div class="mt-2">
                                 <b>العنوان :</b>{{ $guest->institution }}
                             </div>
@@ -87,40 +88,44 @@
                             <div class="mt-2">
                                 <b>رقم إثبات الشخصية :</b> {{ $guest->identityId }}
                             </div>
-                            <div class="d-flex justify-content-between mt-3">
+                            <div class="justify-content-between mt-3 pb-4">
                                 @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
                                     <div>
-                                       <b>مدخل البيانات</b> : {{ $guest->user->username }}
+                                        <b>مدخل البيانات</b> : {{ $guest->user->username }}
                                     </div>
                                 @endif
                                 <div>
-                                    @if ($guest->room)<b>الحالة</b> : ساكن {{ $guest->room->number }}
-                                @elseif($guest->roomPartner)<b>الحالة</b> : مرافق {{ $guest->roomPartner->number }} @else<b>الحالة</b> : غير
-                                    ساكن @endif
+                                    @if ($guest->room)<b>الحالة</b> : ساكن
+                                        {{ $guest->room->number }}
+                                    @elseif($guest->roomPartner)<b>الحالة</b> : مرافق
+                                    {{ $guest->roomPartner->number }} @else<b>الحالة</b> : غير
+                                        ساكن @endif
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex mt-4 mb-2">
-                            {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
+                            <div class="d-flex mt-4 mb-2">
+                                {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteGuest{{ $guest->id }}">
                                         <i class="fas fa-trash text-danger fa-lg"></i>
                                     </button> --}}
-                            <button type="button" class="btn btn-tool" data-toggle="modal"
-                                data-target="#editGuest{{ $guest->id }}">
-                                <i class="fas fa-edit text-warning fa-lg"></i>
-                            </button>
+                                @if (auth()->user()->ree)
+                                    <button type="button" class="btn btn-tool" data-toggle="modal"
+                                        data-target="#editGuest{{ $guest->id }}">
+                                        <i class="fas fa-edit text-warning fa-lg"></i>
+                                    </button>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- /.widget-user -->
-        </div>
-    @endforeach
-</div>
-<div class="row mt-4 justify-content-center">
-    {{ $guests->links() }}
-</div>
+                    <!-- /.widget-user -->
+            </div>
+        @endforeach
+    </div>
+    <div class="row mt-4 justify-content-center">
+        {{ $guests->links() }}
+    </div>
 @else
-<p>لا يوجد نزلاء حتى الآن</p>
-@endif
+    <p>لا يوجد نزلاء حتى الآن</p>
+    @endif
 
-</div>
+    </div>
 @endsection

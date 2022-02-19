@@ -30,14 +30,15 @@
             <p class="mx-3"><b>تاريخ المغادرة: </b> {{ $bill->deleted_at->format('d/m/Y') }}</p>
             <p class="mx-3"><b>رقم الفاتوره : </b> {{ $bill->id }}</p>
             <p class="mx-3"><b>الجهة : </b>{{ $bill->institution->name }} </p>
-            <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
-                <i class="fa fa-print" aria-hidden="true"></i> طباعة
-            </button>
         </div>
+        <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
+            <i class="fa fa-print" aria-hidden="true"></i> طباعة
+        </button>
         <div class="row justify-content-center mb-5 mx-2">
             <div class="card col-md-12">
                 <!-- /.card-header -->
                 <div class="card-body">
+                    <div class="table-responsive">
                     <table class="table">
                         
                         <thead>
@@ -49,6 +50,7 @@
                                 <th>المبلغ</th>
                                 <th>الضريبة</th>
                                 <th>دمغة / سياحة</th>
+                                <th>مدخل البيانات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,6 +64,7 @@
                                         <td>{{ $detail->price }}</td>
                                         <td>{{ $detail->tax }}</td>
                                         <td>{{ $detail->tourism }}</td>
+                                        <td>{{ $detail->user->username }}</td>
                                     </tr>
                                 @endforeach
                             @else
@@ -69,6 +72,7 @@
                             @endif
                         </tbody>
                     </table>
+                    </div>
                     <div class="d-flex mt-5 align-items-end">
                         <p class="mx-3"><b>المطالبة : </b> {{ $bill->price }} ج</p>
                     </div>

@@ -1,10 +1,4 @@
-@props(['room' => $room,
-             'guests' => $guests,
-                'roomprices' => $roomprices,
-                    'institutions' => $institutions,
-                        'meals' => $meals,
-                            'clothes' => $clothes,
-                            'roomall' => $roomall])
+@props(['room' => $room, 'guests' => $guests, 'roomprices' => $roomprices, 'institutions' => $institutions, 'meals' => $meals, 'clothes' => $clothes, 'roomall' => $roomall, 'accounts' => $accounts])
 
 @include('rooms.create')
 @include('rooms.edit')
@@ -35,15 +29,32 @@
         <h3 class="card-title col-12">
             @if ($room->status != 'تحت التنظيف' && $room->status != 'خارج الخدمة' && $room->status != 'جاهزة')
                 @include('rooms.roomUpdate')
+                @include('rooms.payment')
                 @include('restaurants.create')
                 @include('laundries.create')
                 @include('rooms.changeRoom')
                 @include('rooms.changeRoomPrice')
-                <p class="mt-2">النزيل : {{ $room->guest->name }}</p>
+                @include('rooms.addPartner')
+                @include('rooms.removePartner')
+                <p class="mt-2">
+                    النزيل : {{ $room->guest->name }}
+
+                </p>
                 @if ($room->partner_id != null)
-                    <p>المرافق : {{ $room->partner->name }}</p>
+                    <p>
+                        المرافق : {{ $room->partner->name }}
+
+                    </p>
                 @else
-                    <p>لا يوجد مرافق</p>
+                    <p>
+                        لا يوجد مرافق
+                        @if (auth()->user()->ree)
+                            <button type="button" title="إضافة مرافق" class="btn btn-tool" data-toggle="modal"
+                                data-target="#addPartner{{ $room->id }}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        @endif
+                    </p>
                 @endif
             @else
                 <p class="mt-2">{{ $room->status }}</p>
@@ -51,77 +62,110 @@
             @endif
         </h3>
         <!-- /.card-tools -->
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body text-dark" style="display: block;">
+        <div class="card-tools">
+            @if (auth()->user()->ree)
+                @if ($room->guest_id)
+                    <button type="button" title="تغير الغرفة للنزيل" class="btn btn-tool" data-toggle="modal"
+                        data-target="#changeRoom{{ $room->id }}">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    @if ($room->partner_id)
+                        <button type="button" title="مغادرة المرافق" class="btn btn-tool" data-toggle="modal"
+                            data-target="#removePartner{{ $room->id }}">
+                            <i class="fas fa-door-open"></i>
+                        </button>
+                    @endif
+                @endif
+            @endif
+        </div>
+        <!-- /.card-tools -->
+
         <div class="card-tools">
             {{-- <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#deleteRoom{{ $room->id }}">
                 <i class="fas fa-trash"></i>
             </button> --}}
-            @if (!$room->guest_id)
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#updataRoom{{ $room->id }}">
-                    <i class="fas fa-edit"></i>
-                </button>
-            @endif
+            {{-- @if (!$room->guest_id)
+                    <button type="button" title="تغير حالة الغرفة" class="btn btn-tool" data-toggle="modal"
+                        data-target="#updataRoom{{ $room->id }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                @endif --}}
             @if ($room->guest_id)
-                <a href="{{ route('bill.show', $room->bill->id) }}" class="btn btn-tool">
+                <a title="طباعة الفاتورة" href="{{ route('bill.show', $room->bill->id) }}" class="btn btn-tool">
                     <i class="fas fa-print" aria-hidden="true"></i>
                 </a>
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#changeRoomPrice{{ $room->id }}">
-                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#roomUpdate{{ $room->id }}">
-                    <i class="far fa-bookmark"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#changeRoom{{ $room->id }}">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#restBill{{ $room->id }}">
-                    <i class="fas fa-fish"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#laundryBill{{ $room->id }}">
-                    <i class="fas fa-tshirt"></i>
-                </button>
+                @if (auth()->user()->ree)
+                    <button type="button" title="تغير سعر الغرفة" class="btn btn-tool" data-toggle="modal"
+                        data-target="#changeRoomPrice{{ $room->id }}">
+                        <i class="fas fas fa-bed" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" title="تحديث اليوم" class="btn btn-tool" data-toggle="modal"
+                        data-target="#roomUpdate{{ $room->id }}">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                    <button type="button" title="سداد" class="btn btn-tool" data-toggle="modal"
+                        data-target="#payment{{ $room->id }}">
+                        <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" title="إضافة فاتورة مطعم" class="btn btn-tool" data-toggle="modal"
+                        data-target="#restBill{{ $room->id }}">
+                        <i class="fas fa-fish"></i>
+                    </button>
+                    <button type="button" title="إضافة فاتورة مغسلة" class="btn btn-tool" data-toggle="modal"
+                        data-target="#laundryBill{{ $room->id }}">
+                        <i class="fas fa-tshirt"></i>
+                    </button>
+                @endif
             @endif
         </div>
-        <p class="mt-3">الجهة :@if ($room->roomprice_id){{ $room->institution->name }} @else غير
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body text-dark" style="display: block;">
+        <p class="mt-3">الجهة :@if ($room->roomprice_id)
+            {{ $room->institution->name }} @else غير
                 ساكنة @endif
         </p>
         <p>التصنيف :@if ($room->roomprice_id) {{ $room->roomprice->desc }} -
             {{ $room->roomprice->rent }} @else غير ساكنة @endif
         </p>
-        <p>الفاتورة :@if ($room->bill) {{ $room->bill->price }} @else غير ساكنة @endif
+    <p>الفاتورة :@if ($room->bill) {{ $room->bill->price }} @else غير ساكنة
+            @endif
         </p>
-        @if(auth()->user()->role == 'Admin')
-            <p>مدخل البيانات :@if ($room->user_id) {{ $room->user->username }} @else غير ساكنة @endif
+        @if(auth()->user()->mm || auth()->user()->rem)
+    <p>مدخل البيانات :@if ($room->user_id) {{ $room->user->username }} @else
+                غير ساكنة @endif
+        </p>
         @endif
-        </p>
         @if ($room->status != 'تحت التنظيف' && $room->status != 'خارج الخدمة')
-            <div class="text-center">
-                @if ($room->guest_id)
-                    @include('rooms.leaving')
-                    <button type="button" class="btn btn-danger w-100" data-toggle="modal"
-                        data-target="#leavingGuest{{ $room->id }}">
-                        مغادرة <i class="fas fa-door-closed"></i>
+            @if (auth()->user()->ree)
+                <div class="text-center">
+                    @if ($room->guest_id)
+                        @include('rooms.leaving')
+                        <button type="button" class="btn btn-danger w-100" data-toggle="modal"
+                            data-target="#leavingGuest{{ $room->id }}">
+                            مغادرة <i class="fas fa-door-closed"></i>
+                        </button>
+                    @else
+                        <button type="button" class="btn btn-success w-100" data-toggle="modal"
+                            data-target="#rentGuest{{ $room->id }}">
+                            تسكين <i class="fas fa-door-open"></i>
+                        </button>
+                    @endif
+                </div>
+            @endif
+        @else
+            @if (auth()->user()->shm)
+                @if ($room->status == 'خارج الخدمة')
+                    <button type="button" class="btn btn-info w-100" data-toggle="modal"
+                        data-target="#updataRoom{{ $room->id }}">
+                        تجهيز الغرفة <i class="fas fa-tools"></i>
                     </button>
-                @else
-                    <button type="button" class="btn btn-success w-100" data-toggle="modal"
-                        data-target="#rentGuest{{ $room->id }}">
-                        تسكين <i class="fas fa-door-open"></i>
+                @elseif ($room->status == "تحت التنظيف")
+                    <button type="button" class="btn btn-info w-100" data-toggle="modal"
+                        data-target="#updataRoom{{ $room->id }}">
+                        تجهيز الغرفة <i class="fas fa-hands-wash"></i>
                     </button>
                 @endif
-            </div>
-        @else
-            @if ($room->status == 'خارج الخدمة')
-                <button type="button" class="btn btn-info w-100" data-toggle="modal"
-                    data-target="#updataRoom{{ $room->id }}">
-                    تجهيز الغرفة <i class="fas fa-tools"></i>
-                </button>
-            @elseif ($room->status == "تحت التنظيف")
-                <button type="button" class="btn btn-info w-100" data-toggle="modal"
-                    data-target="#updataRoom{{ $room->id }}">
-                    تجهيز الغرفة <i class="fas fa-hands-wash"></i>
-                </button>
             @endif
         @endif
     </div>

@@ -18,6 +18,7 @@ class SubAccountController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'main_accounts_id' => 'required',
+            'type' => 'required',
             'price' => '',
         ]);
 
@@ -25,6 +26,7 @@ class SubAccountController extends Controller
         $subAccount = new SubAccount();
         $subAccount->name = $request->input('name');
         $subAccount->main_accounts_id = $request->input('main_accounts_id');
+        $subAccount->type = $request->input('type');
         $subAccount->price = $request->input('price');
         $subAccount->save();
 
@@ -36,15 +38,17 @@ class SubAccountController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'main_accounts_id' => 'required',
+            'type' => 'required',
             'price' => '',
         ]);
 
         // update sub account
         $subAccount->name = $request->input('name');
         $subAccount->main_accounts_id = $request->input('main_accounts_id');
+        $subAccount->type = $request->input('type');
         $subAccount->price = $request->input('price');
         $subAccount->save();
 
-        return redirect('/main/accounts/'.$subAccount->main_accounts_id)->with('success', 'تم تعديل اسم الحساب');
+        return redirect('/main/accounts/'.$subAccount->main_accounts_id)->with('success', 'تم تعديل الحساب');
     }
 }

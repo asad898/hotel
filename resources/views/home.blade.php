@@ -47,12 +47,12 @@
         <div class="row pt-5">
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hands-wash"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">النزلاء</span>
+                        <span class="info-box-text">الغرف تحت التنظيف</span>
                         <span class="info-box-number">
-                            {{ $guests1 }}
+                            {{ $rooms4 }}
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -82,8 +82,8 @@
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">الطلبات</span>
-                        <span class="info-box-number">{{ $bill }}</span>
+                        <span class="info-box-text">الغرف الساكنة</span>
+                        <span class="info-box-number">{{ $rooms2 }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -92,11 +92,11 @@
             <!-- /.col -->
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-store"></i></span>
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-tools"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">اصناف المخزن</span>
-                        <span class="info-box-number">{{ $store }}</span>
+                        <span class="info-box-text">الغرف خارج الخدمة</span>
+                        <span class="info-box-number">{{ $rooms3 }}</span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -104,11 +104,14 @@
             </div>
             <!-- /.col -->
         </div>
-        <div class="row pt-5">
+        <div class="pt-5 h4">
+            الغرف الساكنة:
+        </div>
+        <div class="row">
             @if (count($rooms))
                 @foreach ($rooms as $room)
                     <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
-                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" />
+                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" :accounts="$accounts"/>
                 @endforeach
             @endif
         </div>
@@ -116,7 +119,10 @@
             {{ $rooms->links() }}
         </div>
         @if (count($guests2))
-            <div class="row pt-3">
+            <div class="pt-3 h4">
+                آخر النزلاء:
+            </div>
+            <div class="row">
                 @foreach ($guests2 as $guest)
                     @include('guests.edit')
                     @include('guests.delete')

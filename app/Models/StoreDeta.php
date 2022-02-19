@@ -12,11 +12,16 @@ class StoreDeta extends Model
     
     public function storeBill()
     {
-        return $this->hasOne(StoreBill::class);
+        return $this->hasOne(StoreBill::class)->withTrashed();
     }
 
     public function store()
     {
         return $this->belongsTo(Store::class);
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 }

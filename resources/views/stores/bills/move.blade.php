@@ -3,19 +3,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title" id="exampleModalLabel">تأكيد ترحيل فاتورة</h5>
+                <h5 class="modal-title" id="exampleModalLabel">تأكيد ترحيل سند</h5>
                 <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <p>هل تريد ترحيل الفاتورة بالرقم <b> {{ $storeBill->id }} </b> ؟</p>
+                <p>هل تريد ترحيل السند بالرقم <b> {{ $storeBill->id }} </b> ؟</p>
             </div>
             <div class="modal-footer">
                 <form action="{{ route('store.bill.delete', $storeBill->id) }}" method="POST">
                     @csrf
                     @method('delete')
-                    <input type="submit" value="ترحيل الفاتوره" class="btn btn-info unprint mx-3 my-2">
+                    <input type="submit" value="ترحيل السند" class="btn btn-info unprint mx-3 my-2">
                 </form>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">لا</button>
             </div>

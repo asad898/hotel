@@ -78,6 +78,50 @@ class UserProfileController extends Controller
         return redirect('/users/'.$user->username)->with('success', 'تم تحديث البيانات');
     }
 
+    public function roles(Request $request, User $user)
+    {
+        $this->validate($request, [
+            'am' => '',
+            'shm' => '',
+            'ree' => '',
+            'mm' => '',
+            'rem' => '',
+        ]);
+        if( $request->input('am') == false ) {
+            $ch1 = 0;
+        } else {
+            $ch1 = 1;
+        }
+        if( $request->input('shm') == false ) {
+            $ch2 = 0;
+        } else {
+            $ch2 = 1;
+        }
+        if( $request->input('ree') == false ) {
+            $ch3 = 0;
+        } else {
+            $ch3 = 1;
+        }
+        if( $request->input('mm') == false ) {
+            $ch4 = 0;
+        } else {
+            $ch4 = 1;
+        }
+        if( $request->input('rem') == false ) {
+            $ch5 = 0;
+        } else {
+            $ch5 = 1;
+        }
+        $user->am = $ch1;// مدير حسابات
+        $user->shm = $ch2;// مدير إشراف
+        $user->ree = $ch3;// موظف إستقبال
+        $user->mm = $ch4;// مدير عام
+        $user->rem = $ch5;// مدير إستقبال
+
+        $user->save();
+        return redirect()->back()->with('success', 'تم تحديث الصلاحيات');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

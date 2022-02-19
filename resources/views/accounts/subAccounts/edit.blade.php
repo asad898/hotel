@@ -15,9 +15,34 @@
             <div class="modal-body">
                 <div class="form-group row mx-0">
 
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
                         <label for="name" class="font-weight-light pb-3">إسم الحساب</label>
                         {{ Form::text('name', $sub->name, ['class' => 'form-control']) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="my-select" class="pb-3">النوع الحساب</label>
+                        <select id="my-select" class="custom-select" name="type">
+                            @if ($sub->type == "عادي")
+                                <option value="عادي" selected class="">عادي</option>
+                                <option value="مدين" class="">مدين</option>
+                                <option value="دائن" class="">دائن</option>
+                            @endif
+                            @if ($sub->type == "مدين")
+                                <option value="عادي" class="">عادي</option>
+                                <option value="مدين" selected class="">مدين</option>
+                                <option value="دائن" class="">دائن</option>
+
+                            @endif
+                            @if ($sub->type == "دائن")
+                                <option value="عادي" class="">عادي</option>
+                                <option value="مدين" class="">مدين</option>
+                                <option value="دائن" selected class="">دائن</option>
+                            @else
+                                <option value="عادي" class="">عادي</option>
+                                <option value="مدين" class="">مدين</option>
+                                <option value="دائن" class="">دائن</option>
+                            @endif
+                        </select>
                     </div>
                     <input type="hidden" value="{{ $mainAccount->id }}" name="main_accounts_id">
                 </div>

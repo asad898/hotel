@@ -32,6 +32,8 @@
                                             aria-label="Engine version: activate to sort column ascending">اسم الحساب</th>
                                         <th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                             aria-label="Platform(s): activate to sort column ascending">تاريخ الانشاء</th>
+                                        <th class="sorting text-center" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending">النوع</th>
                                         <th class="sorting text-center unprint" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                             aria-label="Browser: activate to sort column ascending">#</th>
                                     </tr>
@@ -48,6 +50,9 @@
                                                     <td>{{ $sub->name }}</td>
                                                     <td>
                                                         {{ $sub->created_at }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $sub->type }}
                                                     </td>
                                                     <td class="unprint text-center">
                                                         <button type="button" class="btn btn-tool" data-toggle="modal"
@@ -67,6 +72,7 @@
                                         <th class="text-center" rowspan="1" colspan="1">رقم الحساب</th>
                                         <th class="text-center" rowspan="1" colspan="1">اسم الحساب</th>
                                         <th class="text-center" rowspan="1" colspan="1">تاريخ الانشاء</th>
+                                        <th class="text-center" rowspan="1" colspan="1">النوع</th>
                                         <th class="text-center unprint" rowspan="1" colspan="1">#</th>
                                     </tr>
                                 </tfoot>

@@ -51,13 +51,11 @@ class StoreController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'price' => 'required',
-            'quantity' => '',
             'measure' => 'required',
         ]);
 
         // edit store
         $store->name = $request->input('name');
-        $store->quantity = $request->input('quantity');
         $store->price = $request->input('price');
         $store->measure = $request->input('measure');
         $store->save();

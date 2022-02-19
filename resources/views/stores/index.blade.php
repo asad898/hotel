@@ -18,6 +18,7 @@
 @section('content')
     @include('stores.create')
     @include('stores.bills.createBill')
+    @include('stores.bills.createPay')
     <div class="container-fluid">
         <h1 class="text-center my-3">المخزن</h1>
         <div class="justify-content-between row unprint">
@@ -51,7 +52,10 @@
         </div>
         <div class="row my-3 mx-0 unprint">
             <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#sellBill">
-                فاتورة بيع
+                إذن صرف
+            </button>
+            <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#payBill">
+                إذن شراء
             </button>
         </div>
         <div class="row">
@@ -78,11 +82,11 @@
                                         data-target="#storeUpdate{{ $store->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>
                                     </button>
-                                    <button type="button" class="btn btn-tool unprint" data-toggle="modal"
+                                    {{-- <button type="button" class="btn btn-tool unprint" data-toggle="modal"
                                         data-target="#payItem{{ $store->id }}">
                                         <i class="fas fa-plus text-warning fa-lg"></i>
                                         إضافة
-                                    </button>
+                                    </button> --}}
                                 </div>
                             </div>
                             <!-- /.info-box-content -->
@@ -91,7 +95,7 @@
                     </div>
                 @endforeach
             @else
-                <p>لا توجد وجبات حتى الآن</p>
+                <p>لا توجد عناصر حتى الآن</p>
             @endif
         </div>
     </div>

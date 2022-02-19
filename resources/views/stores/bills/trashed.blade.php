@@ -17,20 +17,43 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h5 class="text-center my-4">الفواتير المرحلة</h5>
+        <h5 class="text-center my-4">السندات المرحلة</h5>
+        <div class="justify-content-between row unprint mb-3">
+            <div class="col-md-6 mt-3">
+                <form action="{{ route('store.bill.trashed') }}" method="GET" role="search">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info rounded-0" type="submit" title="Search projects">
+                                <span class="fas fa-search"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control" name="term" placeholder="البحث" id="term">
+                        <a href="{{ route('store.bill.trashed') }}" class="">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger rounded-0" type="button" title="Refresh page">
+                                    <span class="fas fa-sync-alt"></span>
+                                </button>
+                            </span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
         <div class="row">
             @if (count($bills))
                 @foreach ($bills as $bill)
                     <a href="{{ route('store.bill.trashed.show', $bill->id) }}" class="col-md-3 text-dark">
                         <div class="card card-outline card-success">
                             <div class="card-header">
-                                <p>رقم الفاتورة : <b>{{ $bill->id }}</b></p>
-                                
+                                <p>رقم السند : <b>{{ $bill->id }}</b></p>
+                                    <p class="">النوع :{{ $bill->type }}</p>
                                 <!-- /.card-tools -->
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <p class="">البيان : <b>{{ $bill->statement }}</b> </p>
+                                <p class=""><b>البيان / المورد : </b></p>
+                                    <p>{{ $bill->statement }}</p> 
                                 <p>التاريخ : <b>{{ $bill->created_at->format('d/m/Y') }}</b> </p>
                                 <small><b>مدخل البيانات : </b>{{ $bill->user->username }}</small>
                             </div>
@@ -39,6 +62,9 @@
                         <!-- /.card -->
                     </a>
                 @endforeach
+                <div class="mt-5">
+                    {{ $bills->links() }}
+                </div>
             @else
                 <b class="m-4"> لا توجد فواتير مرحلة </b>
             @endif

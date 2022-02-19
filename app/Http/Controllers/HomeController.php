@@ -12,6 +12,7 @@ use App\Models\RestBill;
 use App\Models\Room;
 use App\Models\RoomPrice;
 use App\Models\Store;
+use App\Models\SubAccount;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -42,9 +43,13 @@ class HomeController extends Controller
         $institutions = Institution::latest()->get();
         $guests1 = count(Guest::get());
         $rooms1 = count(Room::where('status', '=', 'جاهزة')->get());
+        $rooms2 = count(Room::where('status', '=', 'ساكنة')->get());
+        $rooms3 = count(Room::where('status', '=', 'خارج الخدمة')->get());
+        $rooms4 = count(Room::where('status', '=', 'تحت التنظيف')->get());
         $bill = count(Bill::withTrashed()->get());
         $lbill = count(Laundry::get());
         $store = count(Store::get());
+        $accounts = SubAccount::latest()->get();
         $rooms = Room::where([
             ['status', '=', 'ساكنة'],
             [function ($query) use ($request) {
@@ -56,11 +61,14 @@ class HomeController extends Controller
             ->with(['guest', 'roomprice', 'partner', 'institution', 'user', 'bill'])
             ->orderBy("id", "asc")
             ->paginate(8);
-        return view('home', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall']))
+        return view('home', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall', 'accounts']))
             ->with('guests1', $guests1)
             ->with('guests2', $guests2)
             ->with('rooms', $rooms)
             ->with('rooms1', $rooms1)
+            ->with('rooms2', $rooms2)
+            ->with('rooms3', $rooms3)
+            ->with('rooms4', $rooms4)
             ->with('bill', $bill)
             ->with('lbill', $lbill)
             ->with('store', $store);

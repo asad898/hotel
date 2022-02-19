@@ -16,12 +16,22 @@
                         <label for="statement" class="font-weight-light">السلعة</label>
                         <input name="store_id" class="form-control" list="store_id">
                         <datalist id="store_id">
-                            @if (count($items))
-                                @foreach ($items as $item)
-                                    @if ($item->quantity != 0)
+                            @if ($storeBill->type == 'pay')
+                                @if (count($items))
+                                    @foreach ($items as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endif
-                                @endforeach
+                                    @endforeach
+                                @endif
+                            @endif
+
+                            @if ($storeBill->type != 'pay')
+                                @if (count($items))
+                                    @foreach ($items as $item)
+                                        @if ($item->quantity != 0)
+                                            <option value="{{ $item->id }}">{{ $item->name }} / {{ $item->quantity }}</option>
+                                        @endif
+                                    @endforeach
+                                @endif
                             @endif
                         </datalist>
                     </div>

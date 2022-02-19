@@ -31,8 +31,8 @@ class RoomPriceController extends Controller
         $roomsprices->tourism = $request->input('tourism');
         $roomsprices->rent = $request->input('rent');
         $tax = $request->input('tax') /100 * $request->input('rent');
-        dd($tax);
-        $roomsprices->price =  $request->input('rent');
+        $tourism = $request->input('tourism') /100 * $request->input('rent');
+        $roomsprices->price =  $request->input('rent') - $tax - $tourism;
         $roomsprices->save();
         
         return redirect('/roomsprices')->with('success', 'تم تسجيل تصنيف جديد');

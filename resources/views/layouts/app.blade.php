@@ -7,6 +7,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400&display=swap" rel="stylesheet">
 
+    <!-- app logo -->
+    <link rel="icon" href="{{ asset('img/pngaaa.com-5860106.png') }}" type="image/x-icon" />
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <meta charset="utf-8">
@@ -70,7 +73,7 @@
                     <li class="nav-item d-none d-sm-inline-block">
                         <a href="{{ route('home') }}" class="nav-link">الرئيسية</a>
                     </li>
-                    @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+                    @if (auth()->user()->am)
                         <li class="nav-item d-none d-sm-inline-block">
                             <a href="{{ route('main.accounts') }}" class="nav-link">الحسابات</a>
                         </li>
@@ -86,11 +89,11 @@
                             <i class="fas fa-expand-arrows-alt"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                             <i class="fas fa-th-large"></i>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
                             <div class="d-flex">
@@ -105,7 +108,7 @@
                                 <i class="fas fa-user mr-3"></i>
                                 <span class="float-right text-muted text-sm">حساب {{ auth()->user()->username }}</span>
                             </a>
-                            @if (auth()->user()->role == 'Admin')
+                            @if (auth()->user()->mm)
                                 <div class="dropdown-divider"></div>
                                 <a class="nav-link d-flex justify-content-between" href="{{ route('register') }}">
                                     <i class="fas fa-users mr-3"></i>
@@ -114,7 +117,7 @@
                             @endif
                             <div class="dropdown-divider"></div>
                             <a class="nav-link d-flex justify-content-between" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
+                                                    document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt mr-3"></i>
                                 <span class="float-right text-muted text-sm">تسحيل خروج</span>
                             </a>
@@ -133,7 +136,6 @@
             </ul>
         </nav>
         <!-- /.navbar -->
-
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/" class="brand-link text-center">
@@ -152,7 +154,7 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                             data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
-                               with font-awesome or any other icon font library -->
+                                       with font-awesome or any other icon font library -->
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-door-open mr-3"></i>
@@ -166,6 +168,12 @@
                                         <a href="{{ route('rooms') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>عرض الغرف</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('guests') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>النزلاء</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -186,7 +194,7 @@
                                             <p>المؤسسات و الشركات</p>
                                         </a>
                                     </li>
-                                    @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+                                    @if (auth()->user()->am || auth()->user()->mm)
                                         <li class="nav-item">
                                             <a href="{{ route('roomsprices') }}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
@@ -256,36 +264,37 @@
                                     </li>
                                 </ul>
                             </li>
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-store-alt mr-3" aria-hidden="true"></i>
-                                    <p>
-                                        المخزن
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview" style="display: none;">
-                                    <li class="nav-item">
-                                        <a href="{{ route('stores') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>عرض المخزن</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('store.bill.trashed') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>الفواتير المرحلة</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('store.bill.unsaved') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>الفواتير غير المرحلة</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                            @if (auth()->user()->shm)
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-store-alt mr-3" aria-hidden="true"></i>
+                                        <p>
+                                            المخزن
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        <li class="nav-item">
+                                            <a href="{{ route('stores') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>عرض المخزن</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('store.bill.trashed') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>السندات المرحلة</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('store.bill.unsaved') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>السندات غير المرحلة</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
                             @if (auth()->user()->role == 'Admin')
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -302,10 +311,16 @@
                                                 <p>عرض المستخدمين</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.index.store') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>طلبات المخزن</p>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             @endif
-                            @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+                            @if (auth()->user()->am || auth()->user()->mm)
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon fa fa-calculator mr-3" aria-hidden="true"></i>
@@ -315,6 +330,12 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
+                                        <li class="nav-item">
+                                            <a href="{{ route('am.index.store') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>طلبات المخزن</p>
+                                            </a>
+                                        </li>
                                         <li class="nav-item">
                                             <a href="{{ route('pay.create') }}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
@@ -370,6 +391,7 @@
             </div>
             <!-- /.sidebar -->
         </aside>
+
 
         <div class="content-wrapper text-right pt-4" dir="rtl">
             @include('layouts.mess')

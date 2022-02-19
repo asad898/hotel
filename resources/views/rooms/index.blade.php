@@ -50,20 +50,20 @@
                 </form>
             </div>
 
-            <div class="col-md-6 d-flex justify-content-end mt-3">
+            {{-- <div class="col-md-6 d-flex justify-content-end mt-3">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoom">
                     <i class="fas fa-plus"></i>
                     إضافة غرفة جديدة
                 </button>
             </div>
-            @include('rooms.create')
+            @include('rooms.create') --}}
 
         </div>
         <div class="row pt-5">
             @if (count($rooms))
                 @foreach ($rooms as $room)
                     <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
-                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" />
+                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" :accounts="$accounts" />
                 @endforeach
         </div>
         <div class="row mt-5 justify-content-center">

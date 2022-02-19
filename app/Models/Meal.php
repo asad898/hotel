@@ -14,4 +14,9 @@ class Meal extends Model
     {
         return $this->hasMany(RestBill::class);
     }
+
+    public function billde()
+    {
+        return $this->hasOne(BillDe::class, 'meal_id');
+    }
 }

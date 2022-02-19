@@ -46,15 +46,15 @@ class BillDetaController extends Controller
         $detail->bill_id = $request->input('bill_id');
         $room = Room::find($request->input('room_id'));
         $detail->price = $room->roomprice->price;
-        $detail->tax = $room->roomprice->tax / 100 * $room->roomprice->rent;
-        $detail->tourism = $room->roomprice->tourism / 100 * $room->roomprice->rent;
+        $detail->tax = $room->roomprice->tax * 100 / $room->roomprice->rent;
+        $detail->tourism = $room->roomprice->tourism * 100 / $room->roomprice->rent;
         $detail->save();
 
         $bill = Bill::find($request->input('bill_id'));
         $bill->price = $bill->price + $room->roomprice->rent;
         $bill->save();
         
-        return redirect('/rooms')->with('success', 'تم تحديث الغرف');
+        return redirect()->back()->with('success', 'تم تحديث الغرف');
     }
 
     public function restBillStore(Request $request)
@@ -79,12 +79,13 @@ class BillDetaController extends Controller
         $mprice = Meal::find($request->input('meal_id'));
 
         // Restaurant details
+        $tot = $mprice->price * (int)$request->input('amount');
         $restBill = new RestBill;
         $restBill->amount = $request->input('amount');
         $restBill->meal_id = $request->input('meal_id');
         $restBill->bill_id = $request->input('bill_id');
-        $restBill->tax = $tax->tax / 100 * ($mprice->price * (int)$request->input('amount'));
-        $restBill->tourism = ($mprice->price * (int)$request->input('amount')) * $tax->tourism /100;
+        $restBill->tax = $tax->tax / 100 * $tot;
+        $restBill->tourism =  $tax->tourism / 100 * $tot;
         $restBill->save();
 
         // Create Detail
@@ -95,8 +96,8 @@ class BillDetaController extends Controller
         $detail->statment = "فاتورة مطعم (".$restBill->amount." ".$restBill->meal->name.")";
         $detail->price = ($restBill->meal->price * $restBill->amount) - $restBill->tax - $restBill->tourism;
         $detail->bill_id = $request->input('bill_id');
-        $detail->tax = $tax->tax / 100 * ($mprice->price * (int)$request->input('amount'));
-        $detail->tourism = ($mprice->price * (int)$request->input('amount')) * $tax->tourism /100;
+        $detail->tax = $tax->tax / 100 * $tot;
+        $detail->tourism =  $tax->tourism / 100 *$tot;
         $detail->save();
 
         // Add Updated Price To Bill
@@ -104,7 +105,7 @@ class BillDetaController extends Controller
         $bill->price = $bill->price + ($restBill->meal->price * $restBill->amount );
         $bill->save();
         
-        return redirect('/rooms')->with('success', 'تم إضافة فاتورة مطعم');
+        return redirect()->back()->with('success', 'تم إضافة فاتورة مطعم');
     }
 
     public function laundryBill(Request $request)
@@ -128,12 +129,13 @@ class BillDetaController extends Controller
         $mprice = Clothe::find($request->input('clothe_id'));
 
         // Restaurant details
+        $tot = $mprice->price * (int)$request->input('amount');
         $laundry = new Laundry;
         $laundry->amount = $request->input('amount');
         $laundry->clothe_id = $request->input('clothe_id');
         $laundry->bill_id = $request->input('bill_id');
-        $laundry->tax = $tax->tax / 100 * ($mprice->price * (int)$request->input('amount'));
-        $laundry->stamp =  ($mprice->price * (int)$request->input('amount')) * $tax->stamp /100;
+        $laundry->tax = $tax->tax / 100 * $tot;
+        $laundry->stamp =  $tax->stamp / 100 * $tot;
         $laundry->save();
 
         // Create Detail
@@ -144,8 +146,8 @@ class BillDetaController extends Controller
         $detail->statment = "فاتورة مغسلة (".$laundry->amount." ".$laundry->clothe->name.")";
         $detail->price = ($laundry->clothe->price * $laundry->amount) - $laundry->tax - $laundry->stamp;
         $detail->bill_id = $request->input('bill_id');
-        $detail->tax = $tax->tax / 100 * ($mprice->price * (int)$request->input('amount'));
-        $detail->tourism =  ($mprice->price * (int)$request->input('amount')) * $tax->stamp /100;
+        $detail->tax = $tax->tax / 100 * $tot;
+        $detail->tourism =  $tax->stamp / 100 * $tot;
         $detail->save();
 
         // Add Updated Price To Bill
@@ -153,6 +155,27 @@ class BillDetaController extends Controller
         $bill->price = $bill->price + ($laundry->clothe->price * $laundry->amount);
         $bill->save();
         
-        return redirect('/rooms')->with('success', 'تم إضافة فاتورة مغسلة');
+        return redirect()->back()->with('success', 'تم إضافة فاتورة مغسلة');
+    }
+
+    public function destroy($id)
+    {
+        $billDeta = BillDeta::find($id);
+        //Check if post exists before deleting
+        if (!isset($billDeta)) {
+            return redirect()->back()->with('error', 'العنصر غير موجودة');
+        }
+        if($billDeta->type == "pay"){
+            $bill = Bill::find($billDeta->bill_id);
+            $bill->price = $bill->price + $billDeta->price;
+            $bill->save();
+        }
+        if($billDeta->type == null){
+            $bill = Bill::find($billDeta->bill_id);
+            $bill->price = $bill->price - ($billDeta->price + $billDeta->tax + $billDeta->tourism);
+            $bill->save();
+        }
+        $billDeta->forceDelete();
+        return redirect()->back()->with('success', 'تم حذف العنصر');
     }
 }

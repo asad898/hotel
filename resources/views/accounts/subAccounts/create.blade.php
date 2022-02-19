@@ -14,9 +14,17 @@
             <div class="modal-body">
                 <div class="form-group row mx-0">
 
-                    <div class="form-group col-md-12">
-                        <label for="name" class="font-weight-light pb-3">إسم الحساب</label>
-                        {{ Form::text('name', '', ['class' => 'form-control']) }}
+                    <div class="form-group col-md-6">
+                        <label for="name" class="pb-3">إسم الحساب</label>
+                        {{ Form::text('name', '', ['class' => 'form-control', 'id' => 'name']) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="my-select" class="pb-3">النوع الحساب</label>
+                        <select id="my-select" class="custom-select" name="type">
+                            <option value="عادي" class="">عادي</option>
+                            <option value="مدين" class="">مدين</option>
+                            <option value="دائن" class="">دائن</option>
+                        </select>
                     </div>
                     <input type="hidden" value="{{ $mainAccount->id }}" name="main_accounts_id">
                 </div>

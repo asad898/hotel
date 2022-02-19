@@ -50,7 +50,7 @@
 
     @if (session('error1'))
         <div class="alert" style="background-color: #EC6258" role="alert">
-            <strong>{{ __('نتأسف') }}&nbsp;</strong> {{session('error1')}}
+            <strong>{{ __('هناك خطاء') }}&nbsp;</strong> {{session('error1')}}
             <button style="margin-left: 20px;" type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>

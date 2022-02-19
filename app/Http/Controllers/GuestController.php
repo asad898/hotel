@@ -53,7 +53,7 @@ class GuestController extends Controller
         $guest->user_id = Auth::user()->id;
         $guest->save();
         
-        return redirect('/guests')->with('success', 'تم تسجيل نزيل جديد');
+        return redirect()->back()->with('success', 'تم تسجيل نزيل جديد');
     }
 
     public function update(Request $request , Guest $guest)
@@ -76,7 +76,7 @@ class GuestController extends Controller
         $guest->user_id = Auth::user()->id;
         $guest->save();
         
-        return redirect('/guests')->with('success', 'تم تحديث بيانات النزيل ');
+        return redirect()->back()->with('success', 'تم تحديث بيانات النزيل ');
     }
 
     public function destroy(Guest $guest)

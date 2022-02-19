@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Meal;
 use App\Models\RestTax;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class MealController extends Controller
@@ -11,6 +12,7 @@ class MealController extends Controller
     public function index(Request $request)
     {
         $tax = RestTax::find(1);
+        $rooms = Room::latest()->get();
         $meals = Meal::where([
             ['name', '!=', Null],
             [function ($query) use ($request){
@@ -21,7 +23,7 @@ class MealController extends Controller
         ])
         ->orderBy("id", "asc")
         ->get();
-        return view('meals.index', compact(['meals', 'tax']))
+        return view('meals.index', compact(['meals', 'tax', 'rooms']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 

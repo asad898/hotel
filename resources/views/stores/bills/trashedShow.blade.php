@@ -17,11 +17,11 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h5 class="text-center mt-5">فاتورة طلب سلع</h5>
+            <h5 class="text-center mt-5">{{ $storeBill->type }}</h5>
         <div class="d-flex mt-3 align-items-end">
             <p class="mx-3"><b>التاريخ : </b> {{ $storeBill->created_at->format('d/m/Y') }}</p>
-            <p class="mx-3"><b>رقم الفاتوره : </b> {{ $storeBill->id }}</p>
-            <p class="mx-3"><b>البيان : </b> {{ $storeBill->statement }}</p>
+            <p class="mx-3"><b>رقم السند : </b> {{ $storeBill->id }}</p>
+            <p class="mx-3"><b>البيان / المورد : </b> {{ $storeBill->statement }}</p>
             <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
                 <i class="fa fa-print" aria-hidden="true"></i> طباعة
             </button>
@@ -30,6 +30,7 @@
             <div class="card col-md-12">
                 <!-- /.card-header -->
                 <div class="card-body">
+                    <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
@@ -37,6 +38,7 @@
                                 <th>الكمية</th>
                                 <th>سعر الوحدة</th>
                                 <th>السعر</th>
+                                <th>مدخل البيانات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,6 +49,7 @@
                                         <td>{{ $deta->quantity }}</td>
                                         <td>{{ $deta->one_p }}</td>
                                         <td>{{ $deta->price }} ج</td>
+                                        <td>{{ $deta->user->username }} </td>
                                     </tr>
                                     <p style="display: none;">{{ $sum += $deta->price }}</p>
                                 @endforeach
@@ -57,9 +60,11 @@
                             <td></td>
                             <td></td>
                             <td><b>{{ $sum }} ج</b></td>
+                            <td></td>
                         </tr>
                     </table>
-                    <small><b>مدخل الفاتوره : </b>{{ $storeBill->user->username }}</small>
+                    </div>
+                    <small><b>مدخل السند : </b>{{ $storeBill->user->username }}</small>
                 </div>
             </div>
         </div>

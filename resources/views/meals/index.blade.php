@@ -18,8 +18,9 @@
 @section('content')
     @include('meals.create')
     @include('meals.editTax')
+    @include('restaurants.newbills.newbill')
     <div class="container-fluid">
-        <h1 class="text-center">الوجبات</h1>
+        <h1 class="text-center">المطعم</h1>
         <div class="justify-content-between row">
 
             <div class="col-md-6 mt-3">
@@ -43,14 +44,18 @@
             </div>
 
             <div class="col-md-6 d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createMeal">
+                <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#createMeal">
                     <i class="fas fa-plus"></i>
                     إضافة وجبة جديدة
+                </button>
+
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newbill">
+                    فاتورة مطعم
                 </button>
             </div>
 
         </div>
-        @if (auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+        @if (auth()->user()->mm)
             <div class="row mt-3">
                 <div class="col-md-3 col-sm-6 col-12">
                     <div class="info-box">

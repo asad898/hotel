@@ -50,11 +50,30 @@
                                                     </td>
                                                     <td>{{ $user->username }}</td>
                                                     <td>
-                                                        @if($user->role == "AManager")
-                                                            مدير
+                                                        @if ($user->am)
+                                                            <p>
+                                                                مدير حسابات
+                                                            </p>
                                                         @endif
-                                                        @if($user->role == "reception")
-                                                            موظف
+                                                        @if ($user->mm)
+                                                        <p>
+                                                            مدير عام
+                                                        </p>
+                                                        @endif
+                                                        @if ($user->rem)
+                                                        <p>
+                                                            مدير إستقبال
+                                                        </p>
+                                                        @endif
+                                                        @if ($user->shm)
+                                                        <p>
+                                                            مدير الإشراف
+                                                        </p>
+                                                        @endif
+                                                        @if ($user->ree)
+                                                        <p>
+                                                            موظف إستقبال
+                                                        </p>
                                                         @endif
                                                     </td>
                                                     <td>
@@ -62,17 +81,24 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <a href="{{ route('users.show', $user->username) }}"
-                                                            class="btn btn-tool">
+                                                            class="btn btn-tool" title="ملف المستخدم">
                                                             <i class="fa fa-address-card fa-lg text-primary"
                                                                 aria-hidden="true"></i>
                                                         </a>
                                                         @if (auth()->user()->role == 'Admin')
                                                             @include('users.delete')
                                                             <button type="button" class="btn btn-tool" data-toggle="modal"
-                                                                data-target="#deleteUser{{ $user->id }}">
+                                                                data-target="#deleteUser{{ $user->id }}"
+                                                                title="حذف المستخدم">
                                                                 <i class="fas fa-trash text-danger fa-lg"></i>
                                                             </button>
                                                         @endif
+                                                        @include('users.roles')
+                                                        <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                            data-target="#role{{ $user->id }}"
+                                                            title="الصلاحيات">
+                                                            <i class="fas fa-plus text-success fa-lg"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             @endif
