@@ -27,12 +27,15 @@ class RoomPriceController extends Controller
         // New Room Price
         $roomsprices = new RoomPrice();
         $roomsprices->desc = $request->input('desc');
-        $roomsprices->tax = $request->input('tax');
-        $roomsprices->tourism = $request->input('tourism');
         $roomsprices->rent = $request->input('rent');
-        $tax = $request->input('tax') /100 * $request->input('rent');
-        $tourism = $request->input('tourism') /100 * $request->input('rent');
-        $roomsprices->price =  $request->input('rent') - $tax - $tourism;
+        $roomsprices->sNumber = $request->input('sNumber');
+        $mainNumber = $request->input('rent')/$request->input('sNumber');
+        $tourism = $request->input('tourism') /100 * $mainNumber;
+        $touMainNmber = $tourism + $mainNumber;
+        $tax = $request->input('tax') /100 * $touMainNmber;
+        $roomsprices->tax = $tax;
+        $roomsprices->tourism = $tourism;
+        $roomsprices->price =  $mainNumber;
         $roomsprices->save();
         
         return redirect('/roomsprices')->with('success', 'تم تسجيل تصنيف جديد');
@@ -51,12 +54,15 @@ class RoomPriceController extends Controller
 
         // Update Room Price
         $roomprice->desc = $request->input('desc');
-        $roomprice->tax = $request->input('tax');
-        $roomprice->tourism = $request->input('tourism');
         $roomprice->rent = $request->input('rent');
-        $tax = ($request->input('tax') /100) * $request->input('rent');
-        $tourism = ($request->input('tourism') /100) * $request->input('rent');
-        $roomprice->price = $request->input('rent') - $tax - $tourism;
+        $roomprice->sNumber = $request->input('sNumber');
+        $mainNumber = $request->input('rent')/$request->input('sNumber');
+        $tourism = $request->input('tourism') /100 * $mainNumber;
+        $touMainNmber = $tourism + $mainNumber;
+        $tax = $request->input('tax') /100 * $touMainNmber;
+        $roomprice->tax = $tax;
+        $roomprice->tourism = $tourism;
+        $roomprice->price =  $mainNumber;
         $roomprice->save();
         
         return redirect('/roomsprices')->with('success', 'تم تسجيل تصنيف جديد');

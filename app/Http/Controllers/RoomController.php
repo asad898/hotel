@@ -155,8 +155,8 @@ class RoomController extends Controller
                 $detail->room_id = $request->input('room_id');
                 $detail->statment = $request->input('statment');
                 $detail->price = $room->roomprice->price;
-                $detail->tax = $room->roomprice->tax / 100 * $room->roomprice->rent;
-                $detail->tourism = $room->roomprice->tourism / 100 * $room->roomprice->rent;
+                $detail->tax = $room->roomprice->tax;
+                $detail->tourism = $room->roomprice->tourism;
                 $detail->bill_id = $bill->id;
                 $detail->save();
 
@@ -312,8 +312,9 @@ class RoomController extends Controller
         ]);
 
         // Create Pay
+        if (SubAccount::where('id', '=', $request->input('debit'))->exists()) {
         $pay = new Ledger();
-        $pay->statement = $request->input('statment');
+        $pay->statement = $request->input('statment')."رقم الفاتورة ".$room->bill->id;
         if ($request->input('debit') == 26) {
             $pay->credit = $request->input('debit');
             $pay->debit = 21; // حساب الصندوق
@@ -329,6 +330,9 @@ class RoomController extends Controller
         else {
             $pay->debit = $request->input('debit');
             $pay->credit = 26; // حساب إيرادات الغرف
+        }
+        } else {
+            return redirect()->back()->with('error1', 'رقم الحساب غير صحيح ');
         }
         $pay->c_amount = $request->input('price');
         $pay->d_amount = $request->input('price');
@@ -380,6 +384,24 @@ class RoomController extends Controller
         $bill->partner_id = null;
         $bill->save();
         return redirect()->back()->with('success', 'تمت مغادرة المرافق');
+    }
+    
+    public function pchange(Request $request, Room $room)
+    {
+        $this->validate($request, [
+            'partner_id' => 'required',
+            'guest_id' => 'required',
+            'bill_id' => 'required',
+        ]);
+
+        $bill = Bill::find($room->bill->id);
+        $room->partner_id = $request->input('guest_id');
+        $room->guest_id = $request->input('partner_id');
+        $room->save();
+        $room->partner_id = $request->input('guest_id');
+        $bill->guest_id = $request->input('partner_id');
+        $bill->save();
+        return redirect()->back()->with('success', 'تم تغير النزيل مع المرافق');
     }
 
     public function destroy(room $room)

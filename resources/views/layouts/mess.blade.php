@@ -1,6 +1,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="application/javascript"></script>
 
-<div class="mx-3">
+<div class="mx-3 unprint">
     @if(count($errors) > 0)
         @foreach ($errors->all() as $error)
             <div class="alert text-light" style="background-color: #EC6258" role="alert">

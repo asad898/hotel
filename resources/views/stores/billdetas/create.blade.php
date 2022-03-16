@@ -16,7 +16,7 @@
                         <label for="statement" class="font-weight-light">السلعة</label>
                         <input name="store_id" class="form-control" list="store_id">
                         <datalist id="store_id">
-                            @if ($storeBill->type == 'pay')
+                            @if ($storeBill->type == 'إذن شراء')
                                 @if (count($items))
                                     @foreach ($items as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -24,7 +24,7 @@
                                 @endif
                             @endif
 
-                            @if ($storeBill->type != 'pay')
+                            @if ($storeBill->type == 'إذن صرف')
                                 @if (count($items))
                                     @foreach ($items as $item)
                                         @if ($item->quantity != 0)

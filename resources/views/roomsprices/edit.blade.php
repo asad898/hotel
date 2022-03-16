@@ -28,16 +28,22 @@
                     </div>
 
                     <div class="form-group row mx-0">
-                        <div class="form-group col-md-6">
-                            <label for="tax" class="font-weight-light">الضربية</label>
+                        <div class="form-group col-md-4">
+                            <label for="tax" class="font-weight-light">الضربية 17</label>
                             <input name="tax" type="text" class="form-control" id="tax" placeholder=""
-                                value="{{ $roomprice->tax }}" autofocus required>
+                                value="17" autofocus required>
                         </div>
 
-                        <div class="form-group col-md-6">
-                            <label for="tourism" class="font-weight-light">السياحة</label>
+                        <div class="form-group col-md-4">
+                            <label for="tourism" class="font-weight-light">السياحة 5</label>
                             <input name="tourism" type="text" class="form-control" id="tourism" placeholder=""
-                                value="{{ $roomprice->tourism }}" autofocus required>
+                                value="5" autofocus required>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="sNumber" class="font-weight-light">ثابت 1.2285</label>
+                            <input name="sNumber" type="text" class="form-control" id="sNumber" placeholder=""
+                                value="1.2285" autofocus required>
                         </div>
                     </div>
                 </div>

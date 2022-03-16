@@ -22,6 +22,7 @@
             <p class="mx-3"><b>التاريخ : </b> {{ $storeBill->created_at->format('d/m/Y') }}</p>
             <p class="mx-3"><b>رقم السند : </b> {{ $storeBill->id }}</p>
             <p class="mx-3"><b>البيان / المورد : </b> {{ $storeBill->statement }}</p>
+            <p class="mx-3"><b>الجهة</b> :{{ $storeBill->dept }}</p>
             <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
                 <i class="fa fa-print" aria-hidden="true"></i> طباعة
             </button>

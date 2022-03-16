@@ -116,6 +116,11 @@
                                 </a>
                             @endif
                             <div class="dropdown-divider"></div>
+                            <a class="nav-link d-flex justify-content-between" href="{{ route('bond.create') }}">
+                                <i class="fas fa-file-alt mr-3"></i>
+                                <span class="float-right text-muted text-sm">إنشاء سند مفتوح</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
                             <a class="nav-link d-flex justify-content-between" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
                                 <i class="fas fa-sign-out-alt mr-3"></i>
@@ -165,6 +170,12 @@
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
+                                        <a href="{{ route('home') }}" class="nav-link">
+                                            <i class="fa fa-home nav-icon"></i>
+                                            <p>الرئيسية</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{ route('rooms') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>عرض الغرف</p>
@@ -176,6 +187,7 @@
                                             <p>النزلاء</p>
                                         </a>
                                     </li>
+                                    @if (auth()->user()->am || auth()->user()->mm || auth()->user()->ree || auth()->user()->rem || auth()->user()->shm)
                                     <li class="nav-item">
                                         <a href="{{ route('bills') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
@@ -202,9 +214,10 @@
                                             </a>
                                         </li>
                                     @endif
+                                    @endif
                                 </ul>
                             </li>
-
+                            @if (auth()->user()->am || auth()->user()->mm || auth()->user()->ree || auth()->user()->rem || auth()->user()->shm)
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-hamburger mr-3" aria-hidden="true"></i>
@@ -217,19 +230,19 @@
                                     <li class="nav-item">
                                         <a href="{{ route('meals') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>الوجبات</p>
+                                            <p>الرئيسية</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('restaurants') }}" class="nav-link">
+                                        <a href="{{ route('restaurants.bills') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>فواتير النزلاء الحاليين</p>
+                                            <p>فواتير المطعم غرف</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('restaurant.trashed') }}" class="nav-link">
+                                        <a href="{{ route('restaurants.bills1') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>فواتير النزلاء المغادريين</p>
+                                            <p>فواتير المطعم خارجية</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -247,19 +260,19 @@
                                     <li class="nav-item">
                                         <a href="{{ route('clothes') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>انوع الملابس</p>
+                                            <p>الرئيسية</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('laundries') }}" class="nav-link">
+                                        <a href="{{ route('laundry.bills') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>فواتير النزلاء الحاليين</p>
+                                            <p>فواتير المغسلة غرف</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('laundries.trashed') }}" class="nav-link">
+                                        <a href="{{ route('laundry1.bills') }}" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>فواتير النزلاء المغادريين</p>
+                                            <p>فواتير المغسلة الخارجية</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -317,6 +330,18 @@
                                                 <p>طلبات المخزن</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('bond.admin') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>السندات المفتوحة</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('bond.old') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>إرشيف السندات المفتوحة</p>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             @endif
@@ -337,6 +362,18 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="{{ route('bond.am') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>طلبات السندات المفتوحة</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('bond.old') }}" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>إرشيف السندات المفتوحة</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="{{ route('pay.create') }}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>إنشاء قيد
@@ -353,13 +390,13 @@
                                         <li class="nav-item">
                                             <a href="{{ route('journal.index') }}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>دفتر اليومية</p>
+                                                <p>الحركة اليومية</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="{{ route('journal.single') }}" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>دفتر الاستاذ</p>
+                                                <p>كشف الحساب</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -374,14 +411,15 @@
                                                 <p>قائمة الدخل</p>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="{{ route('statement.income') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>قائمة المركز المالي</p>
-                                            </a>
-                                        </li>
+                                        <!--<li class="nav-item">-->
+                                        <!--    <a href="{{ route('statement.income') }}" class="nav-link">-->
+                                        <!--        <i class="far fa-circle nav-icon"></i>-->
+                                        <!--        <p>قائمة المركز المالي</p>-->
+                                        <!--    </a>-->
+                                        <!--</li>-->
                                     </ul>
                                 </li>
+                            @endif
                             @endif
 
                         </ul>

@@ -28,25 +28,30 @@
                 @foreach ($roomsprices as $roomprice)
                     @include('roomsprices.edit')
                     @include('roomsprices.delete')
-                    <div class="col-md-4 col-sm-6 col-12">
+                    <div class="col-md-6 col-12">
                         <div class="info-box bg-gradient-warning">
                             {{-- <span class="info-box-icon"><i class="far fa-dollar"></i></span> --}}
 
                             <div class="info-box-content">
-                                <div class="d-flex">
-                                    <h4 class="ml-2">{{ $roomprice->desc }}</h4>
+                                <h4 class="ml-2">{{ $roomprice->desc }}</h4>
+                                <div class="row">
                                     <div class="px-2 text-center">
                                         <span class="info-box-text">إيجار</span>
                                         <span class="info-box-number">{{ $roomprice->rent }}</span>
                                     </div>
                                     <div class="px-2 text-center">
                                         <span class="info-box-text">ضريبة</span>
-                                        <span class="info-box-number">{{ $roomprice->tax }}%</span>
+                                        <span class="info-box-number">{{ $roomprice->tax }}</span>
                                     </div>
                                     <div class="px-2 text-center">
                                         <span class="info-box-text">سياحة</span>
-                                        <span class="info-box-number">{{ $roomprice->tourism }}%</span>
+                                        <span class="info-box-number">{{ $roomprice->tourism }}</span>
                                     </div>
+                                    <div class="px-2 text-center">
+                                        <span class="info-box-text">ثابت 1.2285</span>
+                                        <span class="info-box-number">{{ $roomprice->sNumber }}</span>
+                                    </div>
+
                                 </div>
 
                                 <div class="progress">

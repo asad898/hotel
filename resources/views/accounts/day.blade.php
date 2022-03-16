@@ -49,6 +49,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -106,6 +107,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">

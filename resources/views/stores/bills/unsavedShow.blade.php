@@ -24,29 +24,32 @@
             <p class="mx-3"><b>التاريخ : </b> {{ $storeBill->created_at->format('d/m/Y') }}</p>
             <p class="mx-3"><b>رقم السند : </b> {{ $storeBill->id }}</p>
             <p class="mx-3"><b>البيان / المورد : </b> {{ $storeBill->statement }}</p>
+            <p class="mx-3"><b>الجهة</b> :{{ $storeBill->dept }}</p>
         </div>
         <div class="d-flex">
             <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
                 <i class="fa fa-print" aria-hidden="true"></i> طباعة
             </button>
-            @if (auth()->user()->am)
-                @if ($storeBill->type != 'pay')
-                    <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal" data-target="#move">
-                        <i class="fa fa-bookmark" aria-hidden="true"></i> تأكيد السند
-                    </button>
-                @endif
-
-                @if ($storeBill->type == 'pay')
+            @if ($storeBill->type != 'إذن شراء')
+                <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal" data-target="#move">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i> تأكيد السند
+                </button>
+            @endif
+            @if (auth()->user()->mm or auth()->user()->am)
+                @if ($storeBill->type == 'إذن شراء')
                     @if (auth()->user()->am)
                         @if ($storeBill->admin_conf)
                             @if (!$storeBill->deleted_at)
-                                <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal"
-                                    data-target="#sell1{{ $storeBill->id }}">
-                                    <i class="fa fa-bookmark" aria-hidden="true"></i> ترحيل السند نقدا
-                                </button>
-                                <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal"
-                                    data-target="#sell2{{ $storeBill->id }}">
-                                    <i class="fa fa-bookmark" aria-hidden="true"></i> ترحيل السند على الحساب
+                                <!--<button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal"-->
+                                <!--    data-target="#sell1{{ $storeBill->id }}">-->
+                                <!--    <i class="fa fa-bookmark" aria-hidden="true"></i> ترحيل السند نقدا-->
+                                <!--</button>-->
+                                <!--<button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal"-->
+                                <!--    data-target="#sell2{{ $storeBill->id }}">-->
+                                <!--    <i class="fa fa-bookmark" aria-hidden="true"></i> ترحيل السند على الحساب-->
+                                <!--</button>-->
+                                <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal" data-target="#move">
+                                    <i class="fa fa-bookmark" aria-hidden="true"></i> تأكيد السند
                                 </button>
                             @endif
                         @endif
@@ -56,7 +59,7 @@
             @if (!$storeBill->admin_conf)
                 @if (!$storeBill->deleted_at)
                     @if (auth()->user()->mm && auth()->user()->am && auth()->user()->rem && auth()->user()->shm)
-                        @if ($storeBill->type == 'pay')
+                        @if ($storeBill->type == 'إذن شراء')
                             <button type="button" class="btn btn-info unprint mx-3 my-2" data-toggle="modal"
                                 data-target="#adminconf">
                                 <i class="fa fa-bookmark" aria-hidden="true"></i> الموافقة على السند
@@ -94,7 +97,7 @@
                                             <td>{{ $deta->one_p }}</td>
                                             <td>{{ $deta->price }}</td>
                                             <td>{{ $deta->user->username }}</td>
-                                            @if (auth()->user()->mm)
+                                            @if (auth()->user()->mm or auth()->user()->shm)
                                                 <td class="unprint">
                                                     <button type="button" class="btn btn-tool" data-toggle="modal"
                                                         data-target="#storeDeta{{ $deta->id }}">

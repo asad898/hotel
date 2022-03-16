@@ -8,46 +8,65 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h1 class="text-center mb-4">فواتير المطعم للنزلاء الحاليين</h1>
+        <h1 class="text-center">فواتير المطعم للنزلاء الحاليين</h1>
         <div class="row">
             <div class="card-body">
-                <div class="card col-sm-12">
-                    <div class="table-responsive">
-                        <table class="table table-hover text-right">
-                            <thead>
-                                <tr>
-                                    <th scope="col">رقم الفاتورة</th>
-                                    <th scope="col">النزيل</th>
-                                    <th scope="col">رقم الغرفة</th>
-                                    <th scope="col">المبلغ</th>
-                                    <th scope="col">التاريخ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (count($bills))
-                                    @foreach ($bills as $bill)
-                                        <tr class="odd">
-                                            <td class="dtr-control sorting_1" tabindex="0">
-                                                <a href="{{ route('restaurants.show', $bill->id) }}">
+                <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+
+                    <div class="row text-left" dir="ltr">
+                        <div class="col-sm-12">
+                            <table id="example1" dir="rtl" class="table table-bordered table-striped dataTable dtr-inline" role="grid"
+                                aria-describedby="example1_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                            aria-label="Engine version: activate to sort column ascending">التاريخ</th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                            aria-label="CSS grade: activate to sort column ascending">رقم الفاتورة</th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                            aria-label="Platform(s): activate to sort column ascending">النزيل</th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                            aria-label="Browser: activate to sort column ascending">رقم الغرفة</th>
+                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-sort="ascending"
+                                             aria-label="Rendering engine: activate to sort column descending">المبلغ
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-right">
+                                    @if (count($bills))
+                                        @foreach ($bills as $bill)
+                                            <tr class="odd">
+                                                <td>{{ $bill->created_at }}</td>
+                                                <td class="dtr-control sorting_1" tabindex="0">
                                                     {{ $bill->id }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $bill->guest->name }} @if ($bill->partner) + {{ $bill->partner->name }}
-                                                @endif
-                                            </td>
-                                            <td>{{ $bill->room->number }}</td>
-                                            <td>
-                                                {{ $bill->price }}
-                                            </td>
-                                            <td>{{ $bill->created_at->format('d/m/Y') }}</td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <p>لا توجد فواتير حتى الآن</p>
-                                @endif
-                            </tbody>
-                        </table>
+                                                </td>
+                                                <td>{{ $bill->guest->name }} @if($bill->partner) + {{ $bill->partner->name }} @endif</td>
+                                                <td>{{ $bill->room->number }}</td>
+                                                <td>
+                                                    <a href="{{ route('restaurants.show', $bill->id) }}">
+                                                        {{ $bill->price }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <p>لا توجد فواتير حتى الآن</p>
+                                    @endif
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th class="text-right" rowspan="1" colspan="1">التاريخ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">رقم الفاتورة</th>
+                                        <th class="text-right" rowspan="1" colspan="1">النزيل</th>
+                                        <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>
+                                        <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

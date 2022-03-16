@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clothe;
 use App\Models\LaundryTax;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class ClotheController extends Controller
@@ -11,6 +12,7 @@ class ClotheController extends Controller
     public function index(Request $request)
     {
         $tax = LaundryTax::find(1);
+        $rooms = Room::latest()->get();
         $clothes = Clothe::where([
             ['name', '!=', Null],
             [function ($query) use ($request){
@@ -21,7 +23,7 @@ class ClotheController extends Controller
         ])
         ->orderBy("id", "asc")
         ->get();
-        return view('clothes.index', compact(['clothes', 'tax']))
+        return view('clothes.index', compact(['clothes', 'tax', 'rooms']))
         ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 

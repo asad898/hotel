@@ -40,6 +40,17 @@ class StoreBillController extends Controller
         if (!count($storeBill->storeDetas)) {
             return redirect('/store/show/unsaved/' . $storeBill->id)->with('error', 'لا يمكنك ترحيل فاتورة فارغة');
         }
+        // لحذف او إضافة الكمية للمخزن
+        foreach ($storeBill->storeDetas as $deta) {
+            $store = Store::find($deta->store_id);
+            if ($storeBill->type == "إذن شراء") {
+                $store->quantity = $store->quantity + $deta->quantity;
+                $store->save();
+            } else {
+                $store->quantity = $store->quantity - $deta->quantity;
+                $store->save();
+            }
+        }
         $storeBill->storeDetas->each->delete();
         $storeBill->delete();
         return redirect('/stores')->with('success', 'تم ترحيل الفاتورة');

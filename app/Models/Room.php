@@ -45,5 +45,10 @@ class Room extends Model
     {
         return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 }

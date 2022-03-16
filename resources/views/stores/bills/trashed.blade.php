@@ -48,6 +48,7 @@
                             <div class="card-header">
                                 <p>رقم السند : <b>{{ $bill->id }}</b></p>
                                     <p class="">النوع :{{ $bill->type }}</p>
+                                    <p class="">الجهة :{{ $bill->dept }}</p>
                                 <!-- /.card-tools -->
                             </div>
                             <!-- /.card-header -->

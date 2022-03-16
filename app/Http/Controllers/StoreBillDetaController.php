@@ -46,13 +46,13 @@ class StoreBillDetaController extends Controller
 
 
         // لحذف او إضافة الكمية للمخزن
-        if($bill->type == "pay"){
-            $storem->quantity = $storem->quantity + $store->quantity;
-            $storem->save();
-        }else{
-            $storem->quantity = $storem->quantity - $store->quantity;
-            $storem->save();
-        }
+        // if($bill->type == "pay"){
+        //     $storem->quantity = $storem->quantity + $store->quantity;
+        //     $storem->save();
+        // }else{
+        //     $storem->quantity = $storem->quantity - $store->quantity;
+        //     $storem->save();
+        // }
         
         return redirect('/store/show/unsaved/'.$store->bill_id)->with('success', 'تم حفظ عنصر جديد');
     }
@@ -62,13 +62,13 @@ class StoreBillDetaController extends Controller
         $storem = Store::find($storeDeta->store_id);
         $bill = StoreBill::find($storeDeta->bill_id);
         // لحذف او إضافة الكمية للمخزن
-        if($bill->type == "pay"){
-            $storem->quantity = $storem->quantity - $storeDeta->quantity;
-            $storem->save();
-        }else{
-            $storem->quantity = $storem->quantity + $storeDeta->quantity;
-            $storem->save();
-        }
+        // if($bill->type == "pay"){
+        //     $storem->quantity = $storem->quantity - $storeDeta->quantity;
+        //     $storem->save();
+        // }else{
+        //     $storem->quantity = $storem->quantity + $storeDeta->quantity;
+        //     $storem->save();
+        // }
         //Check if item exists before deleting
         if (!isset($storeDeta)) {
             return redirect()->back()->with('error', 'العنصر غير موجود');

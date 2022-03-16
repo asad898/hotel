@@ -18,6 +18,7 @@
 @section('content')
     @include('clothes.create')
     @include('clothes.editTax')
+    @include('laundries.newbills.newbill')
     <div class="container-fluid">
         <h1 class="text-center">الملابس</h1>
         <div class="justify-content-between row">
@@ -43,9 +44,13 @@
             </div>
 
             <div class="col-md-6 d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createClothe">
+                <button type="button" class="btn btn-primary mx-2" data-toggle="modal" data-target="#createClothe">
                     <i class="fas fa-plus"></i>
                     إضافة ملابس
+                </button>
+
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newbill">
+                    فاتورة مغسلة
                 </button>
             </div>
 
@@ -59,13 +64,15 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text"><b>الضريبة : </b>{{ $tax->tax }} %</span>
-                            <span class="info-box-text"><b>الدمغة : </b>{{ $tax->stamp }} %</span>
+                            <span class="info-box-text"><b>الدمغة : </b>{{ $tax->stamp }}</span>
                             <div class="d-flex mt-2">
                                 <span class="info-box-number"></span>
+                                @if (auth()->user()->mm)
                                 <button type="button" class="btn btn-tool" data-toggle="modal"
                                     data-target="#editTax{{ $tax->id }}">
                                     <i class="fas fa-edit text-info fa-lg"></i>
                                 </button>
+                                @endif
                                 {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                 data-target="#deleteMeal{{ $meal->id }}">
                                 <i class="fas fa-trash text-danger fa-lg"></i>
@@ -90,10 +97,12 @@
                                 <span class="info-box-text">{{ $clothe->name }}</span>
                                 <div class="d-flex">
                                     <span class="info-box-number">{{ $clothe->price }} ج</span>
+                                    @if (auth()->user()->mm)
                                     <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#editClothe{{ $clothe->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>
                                     </button>
+                                    @endif
                                     {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteClothe{{ $clothe->id }}">
                                         <i class="fas fa-trash text-danger fa-lg"></i>

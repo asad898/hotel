@@ -68,7 +68,7 @@
                         <div class="info-box">
                             <span class="info-box-icon bg-warning"><i class="fas fa-store"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">{{ $store->name }} - الكمية @if ($store->quantity) {{ $store->quantity }} @else 0 @endif / {{ $store->measure }}</span>
+                                <span class="info-box-text">{{ $store->name }}  (الكمية @if ($store->quantity) {{ $store->quantity }} @else 0 @endif / {{ $store->measure }})</span>
                                 <div class="d-flex">
                                     <span class="info-box-number">سعر الوحدة {{ $store->price }} ج</span>
                                     {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
@@ -77,16 +77,15 @@
                                 </button> --}}
                                 </div>
                                 <div class="d-flex mt-3">
-
                                     <button type="button" class="btn btn-tool unprint" data-toggle="modal"
                                         data-target="#storeUpdate{{ $store->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>
                                     </button>
-                                    {{-- <button type="button" class="btn btn-tool unprint" data-toggle="modal"
+                                    <button type="button" class="btn btn-tool unprint" data-toggle="modal"
                                         data-target="#payItem{{ $store->id }}">
                                         <i class="fas fa-plus text-warning fa-lg"></i>
                                         إضافة
-                                    </button> --}}
+                                    </button>
                                 </div>
                             </div>
                             <!-- /.info-box-content -->

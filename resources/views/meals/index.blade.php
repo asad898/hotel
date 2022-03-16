@@ -63,13 +63,15 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text"><b>الضريبة : </b>{{ $tax->tax }} %</span>
-                            <span class="info-box-text"><b>الدمغة : </b>{{ $tax->tourism }} %</span>
+                            <span class="info-box-text"><b>الدمغة : </b>{{ $tax->tourism }} ج</span>
                             <div class="d-flex mt-2">
                                 <span class="info-box-number"></span>
+                                @if (auth()->user()->am)
                                 <button type="button" class="btn btn-tool" data-toggle="modal"
                                     data-target="#editTax{{ $tax->id }}">
                                     <i class="fas fa-edit text-info fa-lg"></i>
                                 </button>
+                                @endif
                                 {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                 data-target="#deleteMeal{{ $meal->id }}">
                                 <i class="fas fa-trash text-danger fa-lg"></i>
@@ -95,10 +97,12 @@
                                 <span class="info-box-text">{{ $meal->name }}</span>
                                 <div class="d-flex">
                                     <span class="info-box-number">{{ $meal->price }} ج</span>
+                                    @if (auth()->user()->mm)
                                     <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#editMeal{{ $meal->id }}">
                                         <i class="fas fa-edit text-warning fa-lg"></i>
                                     </button>
+                                    @endif
                                     {{-- <button type="button" class="btn btn-tool" data-toggle="modal"
                                         data-target="#deleteMeal{{ $meal->id }}">
                                         <i class="fas fa-trash text-danger fa-lg"></i>

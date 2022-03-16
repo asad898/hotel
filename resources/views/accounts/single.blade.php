@@ -17,7 +17,7 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <h3 class="text-center my-4 unprint">دفتر الاستاذ</h3>
+        <h3 class="text-center my-4 unprint">كشف حساب</h3>
         <div class="col-md-12 mb-2 unprint">
             <form action="{{ route('journal.single') }}" method="GET" role="search">
                 <div class="row">
@@ -52,6 +52,9 @@
                     @if ($account->id == $account1)
                         <h4 class="text-center my-3">
                             حساب {{ $account->name }}
+                            <button type="button" onclick="window.print()" class="btn btn-info unprint mx-3 my-2">
+                                <i class="fa fa-print" aria-hidden="true"></i> طباعة
+                            </button>
                         </h4>
                     @endif
                 @endforeach
@@ -63,94 +66,63 @@
                 &nbsp;{{ $to }}
             </div>
             <div class="row m-0 justify-content-center">
-                <div class="card col-md-6">
+                <div class="card col-md-12">
                     <div class="card-header">
                         <h4>حسابات مدينة</h4>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="width: 100px">المبالغ</th>
-                                    <th>البيان</th>
-                                    <th style="width: 100px">التاريخ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($entrys as $entry)
-                                    @if ($entry->credit != $account1)
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>رقم العملية</th>
+                                        <th style="width: 100px">التاريخ</th>
+                                        <th>حساب مدين</th>
+                                        <th>حساب دائن</th>
+                                        <th>البيان</th>
+                                        <th style="width: 100px">مدين</th>
+                                        <th style="width: 100px">دائن</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($entrys as $entry)
                                         <tr class="table-danger">
-                                            <td>{{ $entry->c_amount }}</td>
-                                            <td>الى ح/{{ $entry->cAccount->name }}</td>
+                                            <td>{{ $entry->id }}</td>
                                             <td>{{ $entry->created_at->format('d/m/Y') }}</td>
+                                            <td>{{ $entry->dAccount->name }}</td>
+                                            <td>{{ $entry->cAccount->name }}</td>
+                                            <td>{{ $entry->statement }}</td>
+                                            @if ($entry->credit != $account1)
+                                                <td>{{ $entry->c_amount }}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
+                                            @if ($entry->debit != $account1)
+                                                <td>{{ $entry->d_amount }}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
                                         </tr>
-                                    @endif
-                                    @if ($creditSum < $debitSum)
-                                        <tr class="table-success">
-                                            <td>{{ $stage }}</td>
-                                            <td>رصيد (مرحل)</td>
-                                            <td>{{ $entry->created_at->format('d/m/Y') }}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                                <tr class="table-primary">
-                                    <td><b>المجموع</b></td>
-                                    <td><b>{{ $bigSum }}</b></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        @if ($creditSum > $debitSum)
-                            <b class="mt-5">رصيد منقول {{ $stage }}</b>
-                        @endif
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        {{-- {{ $entrys->links() }} --}}
-                    </div>
-                </div>
+                                    @endforeach
 
-                <div class="card col-md-6">
-                    <div class="card-header">
-                        <h4>حسابات دائنة</h4>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="width: 100px">المبالغ</th>
-                                    <th>البيان</th>
-                                    <th style="width: 100px">التاريخ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($entrys as $entry)
-                                    @if ($entry->debit != $account1)
-                                        <tr class="table-warning">
-                                            <td>{{ $entry->d_amount }}</td>
-                                            <td>من ح/{{ $entry->dAccount->name }}</td>
-                                            <td>{{ $entry->created_at->format('d/m/Y') }}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                                @if ($creditSum > $debitSum)
-                                        <tr class="table-success">
-                                            <td>{{ $stage }}</td>
-                                            <td>رصيد (مرحل)</td>
-                                            <td>{{ $entry->created_at->format('d/m/Y') }}</td>
-                                        </tr>
-                                    @endif
-                                <tr class="table-primary">
-                                    <td><b>المجموع</b></td>
-                                    <td><b>{{ $bigSum }}</b></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    <tr class="table-primary">
+                                        <td><b>المجموع</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>{{ $creditSum }}</b></td>
+                                        <td><b>{{ $debitSum }}</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         @if ($creditSum < $debitSum)
-                            <b class="mt-4">رصيد منقول {{ $stage }}</b>
+                            <b class="mt-5">دائن {{ $stage }}</b>
+                        @endif
+                        @if ($creditSum > $debitSum)
+                            <b class="mt-5">مدين {{ $stage }}</b>
                         @endif
                     </div>
                     <!-- /.card-body -->

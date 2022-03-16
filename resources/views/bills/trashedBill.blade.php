@@ -15,21 +15,27 @@
 
                     <div class="row text-left" dir="ltr">
                         <div class="col-sm-12">
-                            <table id="example1" dir="rtl" class="table table-bordered table-striped dataTable dtr-inline" role="grid"
-                                aria-describedby="example1_info">
+                            <table id="example1" dir="rtl" class="table table-bordered table-striped dataTable dtr-inline"
+                                role="grid" aria-describedby="example1_info">
                                 <thead>
                                     <tr role="row">
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Engine version: activate to sort column ascending">تاريخ المغادرة</th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="CSS grade: activate to sort column ascending">رقم الفاتورة</th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Platform(s): activate to sort column ascending">النزيل</th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                            aria-label="Browser: activate to sort column ascending">رقم الغرفة</th>
-                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
-                                            colspan="1" aria-sort="ascending"
-                                             aria-label="Rendering engine: activate to sort column descending">المبلغ
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Engine version: activate to sort column ascending">تاريخ
+                                            المغادرة</th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="CSS grade: activate to sort column ascending">رقم
+                                            الفاتورة</th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Platform(s): activate to sort column ascending">النزيل
+                                        </th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Browser: activate to sort column ascending">رقم الغرفة
+                                        </th>
+                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-label="Browser: activate to sort column ascending">الجهة</th>
+                                        <th class="sorting text-right sorting_asc" tabindex="0" aria-controls="example1"
+                                            rowspan="1" colspan="1" aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending">#
                                         </th>
                                     </tr>
                                 </thead>
@@ -37,16 +43,26 @@
                                     @if (count($bills))
                                         @foreach ($bills as $bill)
                                             <tr class="odd">
-                                                <td>{{ $bill->deleted_at }}</td>
+                                                <td>{{ $bill->deleted_at->format('d/m/Y') }}</td>
                                                 <td class="dtr-control sorting_1" tabindex="0">
                                                     {{ $bill->id }}
                                                 </td>
-                                                <td>{{ $bill->guest->name }} @if($bill->partner) + {{ $bill->partner->name }} @endif</td>
+                                                <td>{{ $bill->guest->name }} @if ($bill->partner) + {{ $bill->partner->name }}
+                                                    @endif
+                                                </td>
                                                 <td>{{ $bill->room->number }}</td>
+                                                <td>{{ $bill->institution->name }}</td>
                                                 <td>
-                                                    <a href="{{ route('bill.show.trashed', $bill->id) }}">
-                                                        {{ $bill->price }}
-                                                    </a>
+                                                    <div class="d-flex justify-content-center">
+                                                        <a href="{{ route('bill.show.trashed', $bill->id) }}">
+                                                            <i class="fas fa-folder"></i>
+                                                        </a>
+                                                        @if (auth()->user()->mm)
+                                                            <a href="{{ route('bill.edit', $bill->id) }}" class="mx-2">
+                                                                <i class="fas fa-edit text-success fa-lg"></i>
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -60,7 +76,7 @@
                                         <th class="text-right" rowspan="1" colspan="1">رقم الفاتورة</th>
                                         <th class="text-right" rowspan="1" colspan="1">النزيل</th>
                                         <th class="text-right" rowspan="1" colspan="1">رقم الغرفة</th>
-                                        <th class="text-right" rowspan="1" colspan="1">المبلغ</th>
+                                        <th class="text-right" rowspan="1" colspan="1">#</th>
                                     </tr>
                                 </tfoot>
                             </table>

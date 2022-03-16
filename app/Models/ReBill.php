@@ -23,4 +23,9 @@ class ReBill extends Model
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
+    
+    public function bill()
+    {
+        return $this->belongsTo(Bill::class, 'room_id');
+    }
 }

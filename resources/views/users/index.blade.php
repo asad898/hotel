@@ -34,7 +34,7 @@
                                             rowspan="1" colspan="1" aria-sort="ascending"
                                             aria-label="Rendering engine: activate to sort column descending">الهاتف
                                         </th>
-                                        <th class="sorting text-right" tabindex="0" aria-controls="example1" rowspan="1"
+                                        <th class="sorting text-right unprint" tabindex="0" aria-controls="example1" rowspan="1"
                                             colspan="1" aria-label="CSS grade: activate to sort column ascending">المفاتيح
                                         </th>
                                     </tr>
@@ -79,7 +79,7 @@
                                                     <td>
                                                         {{ $user->tel }}
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center unprint">
                                                         <a href="{{ route('users.show', $user->username) }}"
                                                             class="btn btn-tool" title="ملف المستخدم">
                                                             <i class="fa fa-address-card fa-lg text-primary"
@@ -148,7 +148,7 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "buttons": ["copy", "csv", "excel", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('#example2').DataTable({
                 "paging": true,

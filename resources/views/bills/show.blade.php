@@ -47,15 +47,15 @@
                             <thead>
                                 <tr role="row">
                                     <th>التاريخ</th>
-                                    <th>رقم العملية</th>
+                                    <th class="unprint">رقم العملية</th>
                                     <th>البيان</th>
                                     <th>رقم الغرفة</th>
                                     <th>المبلغ</th>
                                     <th>الضريبة</th>
                                     <th>دمغة / سياحة</th>
                                     <th>المجموع</th>
-                                    <th>مدخل البيانات</th>
-                                    @if(auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
+                                    <th class="unprint">مدخل البيانات</th>
+                                    @if (auth()->user()->mm)
                                         <th class="text-center unprint">#</th>
                                     @endif
                                 </tr>
@@ -66,32 +66,103 @@
                                         @include('details.delete')
                                         <tr class="odd">
                                             <td>{{ $detail->created_at->format('d/m/Y') }}</td>
-                                            <td class="dtr-control sorting_1" tabindex="0">{{ $detail->id }}</td>
+                                            <td class="unprint">{{ $detail->id }}</td>
                                             <td>{{ $detail->statment }}</td>
                                             <td>{{ $detail->room->number }}</td>
                                             <td>{{ $detail->price }}</td>
                                             <td>{{ $detail->tax }}</td>
                                             <td>{{ $detail->tourism }}</td>
-                                            <td>{{ $detail->tourism + $detail->tax + $detail->price}}</td>
-                                            <td>{{ $detail->user->username }}</td>
-                                            @if(auth()->user()->role == 'Admin' or auth()->user()->role == 'AManager')
-                                            <td class="unprint">
-                                                <button type="button" class="btn btn-tool" data-toggle="modal"
-                                                    data-target="#deleteBillDeta{{ $detail->id }}">
-                                                    <i class="fas fa-trash text-danger fa-lg"></i>
-                                                </button>
+                                            <td>
+                                                @if ($detail->type == "pay")
+                                                {{ $detail->tourism + $detail->tax + $detail->price }}-
+                                                @else
+                                                {{ $detail->tourism + $detail->tax + $detail->price }}
+                                                @endif
                                             </td>
+                                            @if ($detail->type != 'pay')
+                                                <td hidden>{{ $s += $detail->tourism + $detail->tax + $detail->price }}
+                                                </td>
+                                            @else
+                                                <td hidden>{{ $s -= $detail->price }}
+                                                </td>
                                             @endif
+                                            <td class="unprint">{{ $detail->user->username }}</td>
+                                            <td class="unprint">
+                                                <div class="d-flex">
+                                                    @if (auth()->user()->mm)
+                                                    <button type="button" class="btn btn-tool" data-toggle="modal"
+                                                        data-target="#deleteBillDeta{{ $detail->id }}">
+                                                        <i class="fas fa-trash text-danger fa-lg"></i>
+                                                    </button>
+                                                        <a href="{{ route('details.edit', $detail->id) }}">
+                                                            <i class="fas fa-edit text-info fa-lg"></i>
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
-                                @else
-                                    <p>لا توجد فواتير حتى الآن</p>
                                 @endif
+                                @if (count($dres))
+                                    @foreach ($dres as $dre)
+                                    @if($dre->done != 0)
+                                        <tr class="odd">
+                                            <td>{{ $dre->created_at->format('d/m/Y') }}</td>
+                                            <td class="unprint">{{ $dre->id }}</td>
+                                            <td> فاتورة مطعم بالرقم{{ $dre->id }}</td>
+                                            <td>{{ $dre->room->number }}</td>
+                                            <td>{{ $dre->total }}</td>
+                                            <td>{{ $dre->tax }}</td>
+                                            <td>{{ $dre->stamp }}</td>
+                                            <td>{{ $dre->total + $dre->tax + $dre->stamp }}</td>
+                                            <td hidden>{{ $s += $dre->total + $dre->tax + $dre->stamp }}</td>
+                                            <td class="unprint">{{ $dre->user->username }}</td>
+                                            <td class="unprint">
+                                                <a href="/rebill/{{ $dre->id }}" class="btn btn-tool">
+                                                    <i class="fa fa-folder text-info fa-lg"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                @if (count($dlan))
+                                    @foreach ($dlan as $dre)
+                                    @if($dre->done != 0)
+                                        <tr class="odd">
+                                            <td>{{ $dre->created_at->format('d/m/Y') }}</td>
+                                            <td class="unprint">{{ $dre->id }}</td>
+                                            <td> فاتورة مغسلة بالرقم{{ $dre->id }}</td>
+                                            <td>{{ $dre->room->number }}</td>
+                                            <td>{{ $dre->total }}</td>
+                                            <td>{{ $dre->tax }}</td>
+                                            <td>{{ $dre->stamp }}</td>
+                                            <td>{{ $dre->total + $dre->tax + $dre->stamp }}</td>
+                                            <td hidden>{{ $s += $dre->total + $dre->tax + $dre->stamp }}</td>
+                                            <td class="unprint">{{ $dre->user->username }}</td>
+                                            <td class="unprint">
+                                                <a href="/labill/{{ $dre->id }}" class="btn btn-tool">
+                                                    <i class="fa fa-folder text-info fa-lg"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                <tr>
+                                    <td><b>المجموع</b></td>
+                                    <td class="unprint"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><b>{{ $s }}</b></td>
+                                    <td class="unprint"></td>
+                                    <td class="unprint"></td>
+                                </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="d-flex mt-5 align-items-end">
-                        <p class="mx-3"><b>المطالبة : </b> {{ $bill->price }} ج</p>
                     </div>
                     <small><b>مدخل الفاتوره : </b>{{ $bill->user->username }}</small>
                 </div>

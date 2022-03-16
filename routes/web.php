@@ -1,13 +1,18 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\BillDeController;
 use App\Http\Controllers\BillDetaController;
+use App\Http\Controllers\BondController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\ClotheController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\LaBillController;
+use App\Http\Controllers\LaDetacontroller;
 use App\Http\Controllers\LaundryController;
 use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\MainAccountController;
@@ -63,6 +68,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Remove partenr
     Route::put('/remove/partner/{room}', [RoomController::class, 'removePartner'])->name('room.remove.partner');
+
+    // Change User with Partner
+    Route::put('/change/partner/{room}', [RoomController::class, 'pchange'])->name('room.change.partner');
+
+    // Update All Rooms
+    Route::post('/rooms/all', [RoomController::class, 'updateAll'])->name('room.updateAll');
     
     // Room pricing Routes
     Route::get('/roomsprices', [RoomPriceController::class, 'index'])->name('roomsprices');
@@ -88,13 +99,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Bills Routes
     Route::get('/bills', [BillController::class, 'index'])->name('bills');
+    Route::get('/bill/edit/{id}', [BillController::class, 'edit'])->name('bill.edit');
+    Route::put('/bill/update/{id}', [BillController::class, 'update'])->name('bill.update');
     Route::get('/bills/trashed', [BillController::class, 'trashedBill'])->name('trashedBills');
     Route::get('/bills/{id}', [BillController::class, 'show'])->name('bill.show');
     Route::get('/bills/trashed/{id}', [BillController::class, 'showTrashed'])->name('bill.show.trashed');
     Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bill.delete');
     //Bill Details Routes
     Route::get('/bills/details', [BillDetaController::class, 'index'])->name('details');
+    Route::get('/bills/edit/{id}', [BillDetaController::class, 'edit'])->name('details.edit'); // Admin midd
+    Route::put('/bills/update/{id}', [BillDetaController::class, 'update'])->name('details.update');// Admin midd
     Route::post('/bills/details', [BillDetaController::class, 'store'])->name('detail.store');
+    Route::post('/bills/details1', [BillDetaController::class, 'store1'])->name('detail.store1');
     Route::post('/bills/payment', [RoomController::class, 'payment'])->name('detail.payment');
     Route::delete('/bills/delete/{id}', [BillDetaController::class, 'destroy'])->name('bill.deta.delete');
     
@@ -118,10 +134,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/bills/restBillStore', [BillDetaController::class, 'restBillStore'])->name('detail.restBillStore');
     
     // New bill style
+    Route::get('/restaurants/bills/new', [ReBillControler::class, 'index'])->name('restaurants.bills');
+    Route::get('/restaurants/bills1/new', [ReBillControler::class, 'index1'])->name('restaurants.bills1');
     Route::post('/rebill', [ReBillControler::class, 'store'])->name('rebill.store');
     Route::get('/rebill/{id}', [ReBillControler::class, 'show'])->name('rebill.show');
-    Route::post('/billde', [ReBillControler::class, 'storedeta'])->name('billde.store');
-
+    Route::put('/rebill/update/{id}', [ReBillControler::class, 'update'])->name('rebill.update');
+    Route::put('/rebill/save/{id}', [ReBillControler::class, 'saveReBill'])->name('rebill.store.save');
+    Route::delete('/bill/deta/{id}', [BillDeController::class, 'destroy'])->name('store.billde.delete');
+    Route::put('/cash/save/{id}', [ReBillControler::class, 'saveCash'])->name('cash.store.save');
+    Route::delete('/rebill/{id}', [ReBillControler::class, 'destroy'])->name('store.rebill.delete');
+    // Add details to restaurant bill
+    Route::post('/billde', [BillDeController::class, 'store'])->name('billde.store');
 
     # Store Routes
 
@@ -166,6 +189,19 @@ Route::middleware(['auth'])->group(function () {
 
     // Laundry Tax
     Route::put('/tax/clothe/{id}', [ClotheController::class, 'taxUpdate'])->name('tax.clothe.update');
+
+    // Laundry New Style
+    Route::get('/laundry/bills', [LaBillController::class, 'index'])->name('laundry.bills');
+    Route::get('/laundry/bills1', [LaBillController::class, 'index1'])->name('laundry1.bills');
+    Route::post('/labill', [LaBillController::class, 'store'])->name('labill.store');
+    Route::get('/labill/{id}', [LaBillController::class, 'show'])->name('labill.show');
+    Route::put('/labill/save/{id}', [LaBillController::class, 'savelabill'])->name('labill.store.save');
+    Route::delete('/labilleta/{id}', [LaBillController::class, 'destroy'])->name('store.labill.delete');
+    Route::put('/lacash/save/{id}', [LaBillController::class, 'saveCash'])->name('lacash.store.save');
+
+    // Add details to laundry bill
+    Route::post('/ladeta', [LaDetacontroller::class, 'store'])->name('ladeta.store');
+    Route::delete('/labill/deta/{id}', [LaDetacontroller::class, 'destroy'])->name('la.billde.delete');
 
     // Bills
     Route::get('/laundries', [LaundryController::class, 'index'])->name('laundries');
@@ -215,6 +251,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/income', [LedgerController::class, 'income'])->name('journal.income');
     # قائمة المركز المالي
     Route::get('/income/statement', [LedgerController::class, 'incomeStatement'])->name('statement.income');
-    
+
+    # Comments
+    Route::get('/index/{room}', [CommentController::class, 'index'])->name('comments');    
+    Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('comment.edit');    
+    Route::post('/comment/store', [CommentController::class, 'store'])->name('comment.store');    
+    Route::put('/comment/edit/{comment}', [CommentController::class, 'update'])->name('comment.update');  
+    Route::delete('/comment/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.delete');
+
+    # Open Bond
+    Route::post('/bond/store', [BondController::class, 'store'])->name('bond.store');    
+    Route::get('/create', [BondController::class, 'create'])->name('bond.create');
+    Route::get('/admin/show', [BondController::class, 'admin'])->name('bond.admin');
+    Route::get('/am/show', [BondController::class, 'am'])->name('bond.am');
+    Route::get('/old/show', [BondController::class, 'old'])->name('bond.old');
+    Route::get('/create/edit/{bond}', [BondController::class, 'edit'])->name('bond.edit');    
+    Route::put('/bond/update/{bond}', [BondController::class, 'update'])->name('bond.update');
+    Route::delete('/bond/delete/{bond}', [BondController::class, 'destroy'])->name('bond.delete');
+
 
 });

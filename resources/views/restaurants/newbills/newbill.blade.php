@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="exampleModalLabel">إضافة غرفة جديد</h5>
+                <h5 class="modal-title" id="exampleModalLabel">إضافة فاتورة مطعم</h5>
                 <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
