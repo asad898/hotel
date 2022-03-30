@@ -23,7 +23,7 @@ class Bill extends Model
     }
 
     public function details(){
-        return $this->hasMany(BillDeta::class);
+        return $this->hasMany(BillDeta::class, 'bill_id');
     }
 
     public function institution(){

@@ -17,6 +17,7 @@ class StoreBillController extends Controller
             'statement' => 'required',
             'type' => 'required',
             'dept' => 'required',
+            'user_conf' => '',
             'user_id' => ''
         ]);
 
@@ -25,6 +26,7 @@ class StoreBillController extends Controller
         $store->statement = $request->input('statement');
         $store->type = $request->input('type');
         $store->dept = $request->input('dept');
+        $store->user_conf = 0;
         $store->user_id = Auth::user()->id;
         $store->save();
 

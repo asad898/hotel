@@ -1,4 +1,12 @@
-@props(['room' => $room, 'guests' => $guests, 'roomprices' => $roomprices, 'institutions' => $institutions, 'meals' => $meals, 'clothes' => $clothes, 'roomall' => $roomall, 'accounts' => $accounts])
+@props(['room' => $room, 
+            'guests' => $guests, 
+                'roomprices' => $roomprices, 
+                    'institutions' => $institutions, 
+                        'meals' => $meals, 
+                            'clothes' => $clothes, 
+                                'roomall' => $roomall,
+                                    'myRoom' => $myRoom,
+                                        'accounts' => $accounts])
 
 @include('rooms.create')
 @include('rooms.edit')
@@ -136,7 +144,15 @@
         <p>التصنيف :@if ($room->roomprice_id) {{ $room->roomprice->desc }} /
             {{ $room->roomprice->rent }} @else غير ساكنة @endif
         </p>
-        <p>الفاتورة :@if ($room->bill) {{ $room->bill->price }} @else غير ساكنة
+        <p>
+            الفاتورة :@if ($room->bill)
+                @foreach ($myRoom as $item)
+                    @if ($item['roomId'] == $room->id)
+                        {{ number_format((float)($item['total']), 2) }}
+                    @endif
+                @endforeach
+            @else 
+                غير ساكنة
             @endif
         </p>
         @if (auth()->user()->mm || auth()->user()->rem)

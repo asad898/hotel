@@ -4,7 +4,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="exampleModalLabel">تغير سعر الغرفة </h5>
+                <h5 class="modal-title" id="exampleModalLabel">تغير سعر و جهة الغرفة </h5>
                 <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
@@ -13,16 +13,30 @@
             @csrf
             @method('PUT')
             <div class="modal-body">
-                <div class="form-group col-md-12">
-                    <label for="name" class="font-weight-light">رقم الغرفة</label>
-                    <input name="id" class="form-control" list="roomPrice">
-                    <datalist id="roomPrice">
-                        @if (count($roomprices))
-                            @foreach ($roomprices as $price)
-                                <option value="{{ $price->id }}">{{ $price->desc }}</option>
-                            @endforeach
-                        @endif
-                    </datalist>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="name" class="font-weight-light text-dark">نوع التسكين</label>
+                        <input name="id" class="form-control" list="roomPrice" value="{{ $room->roomprice_id }}">
+                        <datalist id="roomPrice">
+                            @if (count($roomprices))
+                                @foreach ($roomprices as $price)
+                                    <option value="{{ $price->id }}">{{ $price->desc }}</option>
+                                @endforeach
+                            @endif
+                        </datalist>
+                    </div>
+    
+                    <div class="form-group col-md-6">
+                        <label for="name" class="font-weight-light text-dark">الجهه</label>
+                        <input name="inst" class="form-control" list="inst" value="{{ $room->institution->id }}">
+                        <datalist id="inst">
+                            @if (count($institutions))
+                                @foreach ($institutions as $institution)
+                                    <option value="{{ $institution->id }}">{{$institution->name}}</option>
+                                @endforeach
+                            @endif
+                        </datalist>
+                    </div>
                 </div>
             </div>
             <div class="row m-0">

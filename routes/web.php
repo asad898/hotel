@@ -18,6 +18,7 @@ use App\Http\Controllers\LedgerController;
 use App\Http\Controllers\MainAccountController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\ReBillControler;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\RestBillController;
 use App\Http\Controllers\RoomPriceController;
@@ -269,5 +270,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/bond/update/{bond}', [BondController::class, 'update'])->name('bond.update');
     Route::delete('/bond/delete/{bond}', [BondController::class, 'destroy'])->name('bond.delete');
 
+    // Reports Route
+    # Leaving guest report
+    Route::get('/rooms/status/report', [ReportController::class, 'rooms_status_show'])->name('rooms.status');
+    # Live guest report
+    Route::get('/guests/rent/report', [ReportController::class, 'guests_Status'])->name('guest.live');
+    # Cash Rooms report
+    Route::get('/rooms/cash/report', [ReportController::class, 'rooms_cash_show'])->name('rooms.cash');
 
 });

@@ -64,7 +64,7 @@
                                 @if (count($details))
                                     @foreach ($details as $detail)
                                         @include('details.delete')
-                                        <tr class="odd">
+                                        <tr class="odd  @if($detail->type == 'guest') table-info @endif @if($detail->type == 'pay') table-success @endif">
                                             <td>{{ $detail->created_at->format('d/m/Y') }}</td>
                                             <td class="unprint">{{ $detail->id }}</td>
                                             <td>{{ $detail->statment }}</td>
@@ -74,7 +74,7 @@
                                             <td>{{ $detail->tourism }}</td>
                                             <td>
                                                 @if ($detail->type == "pay")
-                                                {{ $detail->tourism + $detail->tax + $detail->price }}-
+                                                {{ $detail->tourism + $detail->tax + $detail->price }}<i class="unprint">-</i>
                                                 @else
                                                 {{ $detail->tourism + $detail->tax + $detail->price }}
                                                 @endif
@@ -150,14 +150,14 @@
                                     @endforeach
                                 @endif
                                 <tr>
-                                    <td><b>المجموع</b></td>
+                                    <td><b>المطالبة</b></td>
                                     <td class="unprint"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>{{ $s }}</b></td>
+                                    <td><b>{{ number_format((float)($s), 2) }}</b></td>
                                     <td class="unprint"></td>
                                     <td class="unprint"></td>
                                 </tr>

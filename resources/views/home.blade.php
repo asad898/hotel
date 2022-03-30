@@ -79,7 +79,7 @@
 
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="info-box mb-3">
-                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+                    <span class="info-box-icon bg-success elevation-1"><i class="fa fa-users"></i></span>
 
                     <div class="info-box-content">
                         <span class="info-box-text">الغرف الساكنة</span>
@@ -104,14 +104,21 @@
             </div>
             <!-- /.col -->
         </div>
-        <div class="pt-5 h4">
+        @if (auth()->user()->shm)
+        @include('rooms.roomUpdateAll')
+        <div class="pt-5 mb-4 h4 d-flex">
             الغرف الساكنة:
+            <button type="button" title="تحديث كل الغرف" class="btn btn-success mx-3" data-toggle="modal"
+                data-target="#roomUpdateAll">
+                تحديث كل الغرف
+            </button>
         </div>
+        @endif
         <div class="row">
             @if (count($rooms))
                 @foreach ($rooms as $room)
                     <x-room :room="$room" :guests="$guests" :roomprices="$roomprices" :institutions="$institutions"
-                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" :accounts="$accounts"/>
+                        :meals="$meals" :clothes="$clothes" :rooms="$rooms" :roomall="$roomall" :myRoom="$myRoom" :accounts="$accounts"/>
                 @endforeach
             @endif
         </div>

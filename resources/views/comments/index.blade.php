@@ -31,7 +31,7 @@
                                 $comment->user->id) float-right @else float-left @endif
                                     ">{{ $comment->user->username }}</span>
                                 <span class="direct-chat-timestamp @if (auth()->user()->id ==
-                                $comment->user->id) float-left @else float-right @endif">{{ $comment->created_at->diffForHumans() }}</span>
+                                $comment->user->id) float-left @else float-right @endif">{{ $comment->created_at }}</span>
                                 <div class="d-flex px-2 @if (auth()->user()->id ==
                                 $comment->user->id) float-right @else float-left @endif">
                                     @if (auth()->user()->id == $comment->user_id)

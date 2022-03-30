@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bill;
+use App\Models\BillDeta;
 use App\Models\Clothe;
 use App\Models\Guest;
 use App\Models\Institution;
+use App\Models\LaBills;
 use App\Models\Laundry;
 use App\Models\Meal;
+use App\Models\ReBill;
 use App\Models\RestBill;
 use App\Models\Room;
 use App\Models\RoomPrice;
@@ -34,6 +37,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $myRoom = array();
         $guests = Guest::latest()->with(['room'])->get();
         $guests2 = Guest::latest()->paginate(6);
         $meals = Meal::latest()->get();
@@ -61,7 +65,53 @@ class HomeController extends Controller
             ->with(['guest', 'roomprice', 'partner', 'institution', 'user', 'bill'])
             ->orderBy("id", "asc")
             ->paginate(8);
-        return view('home', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall', 'accounts']))
+        $rooms12 = Room::where('status', '=', 'ساكنة')->orderBy("id", "asc")->get();
+        foreach ($rooms12 as $room) {
+            $tot = 0;
+            $bill = Bill::where('room_id', '=', $room->id)->firstOrFail();
+            $detas = BillDeta::where('bill_id', '=', $bill->id)->get();
+            $redetas = ReBill::where('bill_id', '=', $bill->id)->get();
+            $ladetas = LaBills::where('bill_id', '=', $bill->id)->get();
+            if (count($detas)) {
+                foreach ($detas as $deta) {
+
+                    if ($deta->type != "pay") {
+                        $tot += $deta->tax + $deta->tourism + $deta->price;
+                    }
+                    if ($deta->type == "pay") {
+                        $tot -= $deta->tax + $deta->tourism + $deta->price;
+                    }
+                }
+            }
+            if (count($redetas)) {
+                foreach ($redetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                    }
+                }
+            }
+            if (count($ladetas)) {
+                foreach ($ladetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                    }
+                }
+            }
+            $myRoom[$room->id]["roomId"] = $room->id;
+            $myRoom[$room->id]["billId"] = $room->bill->id;
+            $myRoom[$room->id]["total"] = $tot;
+        }
+        return view('home', compact(['rooms', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall', 'accounts', 'myRoom']))
             ->with('guests1', $guests1)
             ->with('guests2', $guests2)
             ->with('rooms', $rooms)

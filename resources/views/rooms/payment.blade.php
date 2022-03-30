@@ -4,7 +4,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="exampleModalLabel">السداد - مطالبة الغرفة @if ($room->bill) {{ $room->bill->price }} @else غير ساكنة @endif</h5>
+                <h5 class="modal-title" id="exampleModalLabel" 
+                style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" 
+                unselectable="on"
+                onselectstart="return false;" 
+                onmousedown="return false;">السداد - مطالبة الغرفة
+                    @if ($room->bill)
+                        @foreach ($myRoom as $item)
+                            @if ($item['roomId'] == $room->id)
+                                {{ $item['total'] }}
+                            @endif
+                        @endforeach
+                    @else غير ساكنة
+                    @endif
+                </h5>
                 <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
@@ -29,7 +42,7 @@
                                     @foreach ($accounts as $account)
                                         @if ($account->type == 'مدين' or $account->id == 26 or $account->id == 31 or $account->id == 32)
                                             <option value="{{ $account->id }}">
-                                                @if($account->id == 26) (كاش)
+                                                @if ($account->id == 26) (كاش)
                                                 @elseif($account->id == 31) (كاش)
                                                 @elseif($account->id == 32) (كاش)
                                                 @else مديونية
@@ -43,20 +56,25 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="statment" class="text-dark">المبلغ</label>
-                        <input name="price" type="text" class="form-control" id="price" placeholder="" autofocus required>
+                            <input name="price" type="text" class="form-control" id="price" placeholder="" autofocus
+                                required>
                         </div>
                     </div>
                     <div class="form-group row mx-0">
                         <div class="form-group col-md-12">
                             <label for="statment" class="text-dark">نوع السداد</label>
                             <select class="custom-select" name="statment" id="statment">
-                                <option value="سداد الغرفة رقم {{ $room->number }}" @if($room->institution->id == 1) selected @endif class="">سداد الغرفة رقم {{ $room->number }} (كاش)
+                                <option value="سداد الغرفة رقم {{ $room->number }}" @if ($room->institution->id == 1) selected @endif
+                                    class="">سداد الغرفة رقم {{ $room->number }} (كاش)
                                 </option>
-                                <option value="تحويل مديونية الغرفة رقم {{ $room->number }}" @if($room->institution->id != 1) selected @endif class="">تحويل مديونية الغرفة رقم {{ $room->number }} (على الحساب)
+                                <option value="تحويل مديونية الغرفة رقم {{ $room->number }}" @if ($room->institution->id != 1) selected @endif
+                                    class="">تحويل مديونية الغرفة رقم {{ $room->number }} (على الحساب)
                                 </option>
-                                <option value="سداد فاتورة مطعم الغرفة رقم {{ $room->number }}" @if($room->institution->id == 1) selected @endif class="">سداد فاتورة مطعم
+                                <option value="سداد فاتورة مطعم الغرفة رقم {{ $room->number }}" @if ($room->institution->id == 1) selected @endif
+                                    class="">سداد فاتورة مطعم
                                 </option>
-                                <option value="سداد فاتورة مغسلة الغرفة رقم {{ $room->number }}" @if($room->institution->id == 1) selected @endif class="">سداد فاتورة مغسلة
+                                <option value="سداد فاتورة مغسلة الغرفة رقم {{ $room->number }}" @if ($room->institution->id == 1) selected @endif
+                                    class="">سداد فاتورة مغسلة
                                 </option>
                             </select>
                         </div>

@@ -7,8 +7,10 @@ use App\Models\BillDeta;
 use App\Models\Clothe;
 use App\Models\Guest;
 use App\Models\Institution;
+use App\Models\LaBills;
 use App\Models\Ledger;
 use App\Models\Meal;
+use App\Models\ReBill;
 use App\Models\Room;
 use App\Models\RoomPrice;
 use App\Models\SubAccount;
@@ -19,6 +21,7 @@ class RoomController extends Controller
 {
     public function index(Request $request)
     {
+        $myRoom = array();
         $guests = Guest::latest()->with(['room'])->get();
         $meals = Meal::latest()->get();
         $roomall = Room::latest()->get();
@@ -37,7 +40,53 @@ class RoomController extends Controller
             ->with(['guest', 'roomprice', 'partner', 'institution', 'user', 'bill'])
             ->orderBy("id", "asc")
             ->paginate(8);
-        return view('rooms.index', compact(['rooms', 'accounts', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall']))
+        $rooms1 = Room::where('status', '=', 'ساكنة')->get();
+        foreach ($rooms1 as $room) {
+            $tot = 0;
+            $bill = Bill::where('room_id', '=', $room->id)->firstOrFail();
+            $detas = BillDeta::where('bill_id', '=', $bill->id)->get();
+            $redetas = ReBill::where('bill_id', '=', $bill->id)->get();
+            $ladetas = LaBills::where('bill_id', '=', $bill->id)->get();
+            if (count($detas)) {
+                foreach ($detas as $deta) {
+
+                    if ($deta->type != "pay") {
+                        $tot += $deta->tax + $deta->tourism + $deta->price;
+                    }
+                    if ($deta->type == "pay") {
+                        $tot -= $deta->tax + $deta->tourism + $deta->price;
+                    }
+                }
+            }
+            if (count($redetas)) {
+                foreach ($redetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                    }
+                }
+            }
+            if (count($ladetas)) {
+                foreach ($ladetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                    }
+                }
+            }
+            $myRoom[$room->id]["roomId"] = $room->id;
+            $myRoom[$room->id]["billId"] = $room->bill->id;
+            $myRoom[$room->id]["total"] = $tot;
+        }
+        return view('rooms.index', compact(['rooms', 'accounts', 'guests', 'roomprices', 'institutions', 'meals', 'clothes', 'roomall', 'myRoom']))
             ->with(`i`, (request()->input('page', 1) - 1) * 5);
     }
 
@@ -170,9 +219,9 @@ class RoomController extends Controller
 
         // Update Room
         $room->number = $request->input('number');
-        if ($request->input('status') == "ساكنة"){
+        if ($request->input('status') == "ساكنة") {
             return redirect()->back()->with('error1', 'هناك بعض الحقول الخالية ');
-        }else{
+        } else {
             $room->status = $request->input('status');
         }
         $room->guest_id = $request->input('guest_id');
@@ -187,7 +236,61 @@ class RoomController extends Controller
 
             //Leaving room by soft deleting bill and bill details
             //Check if post exists before soft deleting
-            if ($room->bill->price != 0) {
+            $price = 0;
+            $tax = 0;
+            $tourism = 0;
+            $tot = 0;
+            $tot1 = 0;
+            $detas = BillDeta::where('bill_id', '=', $room->bill->id)->get();
+            $redetas = ReBill::where('bill_id', '=', $room->bill->id)->get();
+            $ladetas = LaBills::where('bill_id', '=', $room->bill->id)->get();
+            if (count($detas)) {
+                foreach ($detas as $deta) {
+                    $tax += $deta->tax;
+                    $tourism += $deta->tourism;
+                    if ($deta->type != "pay") {
+                        $price += $deta->price;
+                    }
+                    if ($deta->type == "pay") {
+                        $tot1 += $deta->price;
+                    }
+                    $tot += $tax + $tourism + $price;
+                    $price = 0;
+                    $tax = 0;
+                    $tourism = 0;
+                }
+            }
+            if (count($redetas)) {
+                foreach ($redetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        $price = 0;
+                        $tax = 0;
+                        $tourism = 0;
+                    }
+                }
+            }
+            if (count($ladetas)) {
+                foreach ($ladetas as $deta) {
+                    if ($deta->done == 1) {
+                        if ($deta->type != "pay") {
+                            $tot += $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        if ($deta->type == "pay") {
+                            $tot -= $deta->tax + $deta->stamp + $deta->total;
+                        }
+                        $price = 0;
+                        $tax = 0;
+                        $tourism = 0;
+                    }
+                }
+            }
+            if (!($tot <= $tot1)) {
                 return redirect()->back()->with('error1', 'لا يمكنك مغادرة الغرفة, لم يتم سداد الفاتورة');
             } else {
                 if (!isset($room->bill)) {
@@ -260,13 +363,22 @@ class RoomController extends Controller
     public function changePrice(Request $request, Room $room)
     {
         $this->validate($request, [
-            'id' => '',
+            'id' => 'required',
+            'inst' => 'required'
         ]);
         if (RoomPrice::where('id', '=', $request->input('id'))->exists()) {
             $room->roomprice_id = $request->input('id');
         } else {
             return redirect()->back()->with('error1', 'هناك خطأ في سعر الغرفة ');
         }
+        $bill = Bill::find($room->bill->id);
+        if (Institution::where('id', '=', $request->input('inst'))->exists()) {
+            $room->institution_id = $request->input('inst');
+            $bill->institution_id = $request->input('inst');
+        } else {
+            return redirect()->back()->with('error1', 'هناك خطأ في اسم جهة ');
+        }
+        $bill->save();
         $room->save();
 
         return redirect()->back()->with('success', 'تم تغير سعر الغرفة');
@@ -313,24 +425,21 @@ class RoomController extends Controller
 
         // Create Pay
         if (SubAccount::where('id', '=', $request->input('debit'))->exists()) {
-        $pay = new Ledger();
-        $pay->statement = $request->input('statment')."رقم الفاتورة ".$room->bill->id;
-        if ($request->input('debit') == 26) {
-            $pay->credit = $request->input('debit');
-            $pay->debit = 21; // حساب الصندوق
-        } 
-        elseif($request->input('debit') == 32) {
-            $pay->credit = $request->input('debit');
-            $pay->debit = 21; // حساب الصندوق
-        }
-        elseif($request->input('debit') == 31) {
-            $pay->credit = $request->input('debit');
-            $pay->debit = 21; // حساب الصندوق
-        }
-        else {
-            $pay->debit = $request->input('debit');
-            $pay->credit = 26; // حساب إيرادات الغرف
-        }
+            $pay = new Ledger();
+            $pay->statement = $request->input('statment') . "رقم الفاتورة " . $room->bill->id;
+            if ($request->input('debit') == 26) {
+                $pay->credit = $request->input('debit');
+                $pay->debit = 21; // حساب الصندوق
+            } elseif ($request->input('debit') == 32) {
+                $pay->credit = $request->input('debit');
+                $pay->debit = 21; // حساب الصندوق
+            } elseif ($request->input('debit') == 31) {
+                $pay->credit = $request->input('debit');
+                $pay->debit = 21; // حساب الصندوق
+            } else {
+                $pay->debit = $request->input('debit');
+                $pay->credit = 26; // حساب إيرادات الغرف
+            }
         } else {
             return redirect()->back()->with('error1', 'رقم الحساب غير صحيح ');
         }
@@ -349,10 +458,10 @@ class RoomController extends Controller
         // if ($bill->price < $request->input('price')) {
         //     return redirect()->back()->with('error1', 'المبلغ المدخل اكبر من مطالبة الفاتورة');
         // } else {
-            $bill->price = $bill->price - $detail->price;
-            $detail->save();
-            $bill->save();
-            $pay->save();
+        $bill->price = $bill->price - $detail->price;
+        $detail->save();
+        $bill->save();
+        $pay->save();
         // }
 
         return redirect()->back()->with('success', 'تم ' . $detail->statment);
@@ -363,6 +472,19 @@ class RoomController extends Controller
         $this->validate($request, [
             'partner_id' => 'required',
         ]);
+        $p = Guest::find($request->input('partner_id'));
+        // Create Detail
+        $detail = new BillDeta;
+        $detail->user_id = Auth::user()->id;
+        $detail->guest_id = $room->guest->id;
+        $detail->room_id = $room->id;
+        $detail->statment = "تم إضافة مرافق ".$p->name;
+        $detail->bill_id = $room->bill->id;
+        $detail->price = 0;
+        $detail->tax = 0;
+        $detail->tourism = 0;
+        $detail->type = "guest";
+        $detail->save();
 
         $bill = Bill::find($room->bill->id);
         $room->partner_id = $request->input('partner_id');
@@ -378,14 +500,29 @@ class RoomController extends Controller
             'partner_id' => '',
         ]);
 
+        // Create Detail
+        $detail = new BillDeta;
+        $detail->user_id = Auth::user()->id;
+        $detail->guest_id = $room->guest->id;
+        $detail->room_id = $room->id;
+        $detail->statment = "تم مغادرة المرافق ".$room->partner->name;
+        $detail->bill_id = $room->bill->id;
+        $detail->price = 0;
+        $detail->tax = 0;
+        $detail->tourism = 0;
+        $detail->type = "guest";
+        $detail->save();
+
         $room->partner_id = null;
         $room->save();
+
         $bill = Bill::find($room->bill->id);
         $bill->partner_id = null;
         $bill->save();
+
         return redirect()->back()->with('success', 'تمت مغادرة المرافق');
     }
-    
+
     public function pchange(Request $request, Room $room)
     {
         $this->validate($request, [
@@ -402,6 +539,29 @@ class RoomController extends Controller
         $bill->guest_id = $request->input('partner_id');
         $bill->save();
         return redirect()->back()->with('success', 'تم تغير النزيل مع المرافق');
+    }
+
+    public function updateAll()
+    {
+        $rooms = Room::where('status', '=', 'ساكنة')->get();
+        foreach ($rooms as $room) {
+            $room1 = new BillDeta;
+            $room1->guest_id = $room->guest->id;
+            $room1->room_id = $room->id;
+            $room1->statment = "إيجار الغرفة رقم $room->number";
+            $room1->price = $room->roomprice->price;
+            $room1->tax = $room->roomprice->tax;
+            $room1->tourism = $room->roomprice->tourism;
+            $room1->bill_id = $room->bill->id;
+            $room1->user_id = Auth::user()->id;
+
+            $bill = Bill::find($room1->bill_id);
+            $bill->price = $bill->price + $room->roomprice->rent;
+            $bill->save();
+
+            $room1->save();
+        }
+        return redirect()->back()->with('success', 'تم تحديث كل الغرف');
     }
 
     public function destroy(room $room)

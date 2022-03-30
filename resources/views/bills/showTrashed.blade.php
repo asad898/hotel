@@ -62,7 +62,7 @@
                             <tbody>
                                 @if (count($details))
                                     @foreach ($details as $detail)
-                                        <tr class="odd @if($detail->type == 'pay') unprint @endif">
+                                        <tr class="odd @if($detail->type == 'guest') table-info @endif @if($detail->type == 'pay') table-success @endif">
                                             <td>{{ $detail->created_at->format('d/m/Y') }}</td>
                                             <td class="unprint">{{ $detail->id }}</td>
                                             <td>{{ $detail->statment }}</td>
@@ -72,7 +72,7 @@
                                             <td>{{ $detail->tourism }}</td>
                                             <td>
                                                 @if ($detail->type == "pay")
-                                                {{ $detail->tourism + $detail->tax + $detail->price }}-
+                                                {{ $detail->tourism + $detail->tax + $detail->price }}<i class="unprint">-</i>
                                                 @else
                                                 {{ $detail->tourism + $detail->tax + $detail->price }}
                                                 @endif
@@ -80,6 +80,9 @@
                                             @if ($detail->type != 'pay')
                                                 <td hidden>{{ $s += $detail->tourism + $detail->tax + $detail->price }}
                                                 </td>
+                                            {{-- @else
+                                                <td hidden>{{ $s -= $detail->price }}
+                                                </td> --}}
                                             @endif
                                             <td class="unprint">{{ $detail->user->username }}</td>
                                             @if (auth()->user()->mm)
@@ -148,14 +151,14 @@
                                     @endforeach
                                 @endif
                                 <tr class="table-danger">
-                                    <td><b>المجموع</b></td>
+                                    <td><b>المطالبة</b></td>
                                     <td class="unprint"></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>{{ $s }} </b></td>
+                                    <td><b>{{ number_format((float)($s), 2) }}</b></td>
                                     <td class="unprint"></td>
                                     <td class="unprint"></td>
                                 </tr>
